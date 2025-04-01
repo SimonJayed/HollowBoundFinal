@@ -20,14 +20,20 @@ public class AssetSetter {
         switch(choice){
             case 0:{
                 gp.player.playing = "amaryllis";
+                gp.companion1 = new NPC_Sylvie(gp);
+                gp.companion2 = new NPC_Fort(gp);
                 break;
             }
             case 1:{
                 gp.player.playing = "fort";
+                gp.companion1 = new NPC_Sylvie(gp);
+                gp.companion2 = new NPC_Amaryllis(gp);
                 break;
             }
             case 2: {
                 gp.player.playing = "sylvie";
+                gp.companion1 = new NPC_Fort(gp);
+                gp.companion2 = new NPC_Amaryllis(gp);
                 break;
             }
         }

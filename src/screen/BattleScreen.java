@@ -8,23 +8,28 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
 
 public class BattleScreen implements Screen{
     GamePanel gp;
 
-    BufferedImage background = null;
-    BufferedImage attack = null;
-    BufferedImage enemy = null;
 
+    BufferedImage background = null;
+
+    public ArrayList<Entity> battleQueue = new ArrayList<>();
     public Entity currentEnemy;
+    public int currentTurn = 0;
     public int commandNum = 0;
 
-    public int spriteNum = 1;
-    public int spriteCounter = 0;
+    public double damage = 0;
+    public int buffer = 0;
+    public int damageBuffer = 0;
 
     public boolean isAttacking = false;
     public boolean canEscape = true;
+    private boolean battleActive = false;
+    public boolean currentTurnFinished = false;
+    public boolean isEnemyTurn = false;
 
     public BattleScreen(GamePanel gp){
         this.gp = gp;
@@ -44,44 +49,70 @@ public class BattleScreen implements Screen{
         background = null;
     }
 
-    public void drawAttack(Graphics2D g2){
-        int x = gp.screenHeight/2 - gp.tileSize/2;
-        int y = gp.screenHeight/3 - gp.tileSize;
-        spriteCounter++;
-        if (spriteNum == 1){
-            attack = gp.player.attack1;
-            enemy = currentEnemy.down1;
-        }
-        else{
-            attack = gp.player.attack2;
-            enemy = currentEnemy.defeated1;
-            if(spriteCounter >= 40){
-                spriteNum = 1;
-                spriteCounter = 0;
-            }
-        }
+    public void startBattle(Entity enemy) {
+        gp.gameState = gp.battleState;
+        loadImages();
+        currentEnemy = enemy;
+        battleQueue.clear();
+        battleQueue.add(gp.player);
+        battleQueue.add(gp.companion1);
+        battleQueue.add(gp.companion2);
+        battleQueue.add(currentEnemy);
 
-        g2.drawImage(enemy, x, y, gp.tileSize*5, gp.tileSize*5, null);
-        g2.drawImage(attack, 0, 0, gp.screenWidth, gp.screenHeight, null);
+        battleQueue.sort(Comparator.comparingInt(e -> (int) -e.agi));
+
+        battleActive = true;
     }
 
     @Override
     public void draw(Graphics2D g2){
-        int x = 0;
-        int y = 0;
-
         g2.setColor(Color.white);
-        g2.drawImage(background, x, y, gp.screenWidth, gp.screenHeight, null);
+        g2.drawImage(background, 0, 0, gp.screenWidth, gp.screenHeight, null);
 
+        update();
         gp.ui.drawMessage();
 
-        //ENEMYBAR && PLAYERBAR
-        drawBar(g2);
+        drawEnemy(g2);
 
-        drawAttack(g2);
+        drawPartyMembers(g2);
 
-        x = gp.tileSize/2;
-        y = gp.tileSize*9 + (gp.tileSize/2);
+        drawMenu(g2);
+
+        drawTurnQueue(g2);
+    }
+
+    public void update() {
+        if (!battleActive) {
+            return;
+        }
+
+        Entity currentEntity = battleQueue.get(currentTurn);
+
+        if (currentEntity == currentEnemy && !currentTurnFinished) {
+            buffer++;
+            isEnemyTurn = true;
+            System.out.println("Enemy Choosing. ");
+            if (buffer > 50) {
+                enemyTurn();
+                isEnemyTurn = false;
+                currentTurnFinished = true;
+                System.out.println("Enemy Turn Finished. ");
+                buffer = 0;
+            }
+        }
+        if(currentTurnFinished){
+            currentTurn = (currentTurn + 1) % battleQueue.size();
+            currentTurnFinished = false;
+        }
+
+    }
+
+
+
+    public void drawMenu(Graphics2D g2){
+
+        int x = gp.tileSize/2;
+        int y = gp.tileSize*9 + (gp.tileSize/2);
         g2.setColor(new Color(0,0,0, 200));
         g2.fillRoundRect(x, y, gp.tileSize*5, gp.tileSize*4, 20, 20);
 
@@ -89,87 +120,9 @@ public class BattleScreen implements Screen{
         g2.setColor(new Color(0,0,0, 200));
         g2.fillRoundRect(x, y, gp.tileSize*11, gp.tileSize*4, 20, 20);
 
-        battleMenu(g2);
-
-    }
-
-    public void drawBar(Graphics2D g2){
-        int x = 0;
-        int y = 0;
-        double oneScale = gp.screenWidth/currentEnemy.maxHP;
-        double hpBarValue = oneScale * currentEnemy.hp;
-
-        g2.setColor(new Color(255, 255, 255));
-        g2.fillRect(x, y, gp.screenWidth, 20);
-
-        g2.setColor(new Color(255,0,30));
-        g2.fillRect(x, y, (int) hpBarValue, 18);
-
-        String text = gp.df.format(currentEnemy.hp) + "/" + gp.df.format(currentEnemy.maxHP);
-        g2.setFont(g2.getFont().deriveFont( 14f));
-        g2.setColor(Color.black);
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-
-        y += gp.tileSize/3;
-
-        double oneScale1 = gp.screenWidth/currentEnemy.maxEnergy;
-        double energyBarValue = oneScale1 * currentEnemy.energy;
-
-        g2.setColor(new Color(255, 255, 255));
-        g2.fillRect(x, y, gp.screenWidth, 18);
-
-        g2.setColor(new Color(255, 227, 24));
-        g2.fillRect(x, y, (int) energyBarValue, 16);
-
-        text = gp.df.format(currentEnemy.energy) + "/" + gp.df.format(currentEnemy.maxEnergy);
-        g2.setFont(g2.getFont().deriveFont( 14f));
-        g2.setColor(Color.black);
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-        y += gp.tileSize/3;
-        text = "Level: " + currentEnemy.level;
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-
-
-        y = (gp.screenHeight/2)+gp.tileSize*2-8;
-        double oneScale3 = gp.screenWidth/gp.player.maxHP;
-        double hpBarValue2 = oneScale3 * gp.player.hp;
-
-        g2.setColor(new Color(255, 255, 255));
-        g2.fillRect(x, y, gp.screenWidth, 20);
-
-        g2.setColor(new Color(255,0,30));
-        g2.fillRect(x, y, (int) hpBarValue2, 18);
-
-        text = gp.player.hp + "/" + gp.player.maxHP;
-        g2.setFont(g2.getFont().deriveFont( 14f));
-        g2.setColor(Color.black);
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-
-        y += gp.tileSize/3;
-
-        double oneScale4 = gp.screenWidth/gp.player.maxEnergy;
-        double energyBarValue2 = oneScale4 * gp.player.energy;
-
-        g2.setColor(new Color(255, 255, 255));
-        g2.fillRect(x, y, gp.screenWidth, 18);
-
-        g2.setColor(new Color(255, 227, 24));
-        g2.fillRect(x, y, (int) energyBarValue2, 16);
-
-        text = gp.df.format(gp.player.energy) + "/" + gp.df.format(gp.player.maxEnergy);
-        g2.setFont(g2.getFont().deriveFont( 14f));
-        g2.setColor(Color.black);
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-        y += gp.tileSize*4;
-        text = "Level: " + gp.player.level;
-        g2.drawString(text, gp.ui.getXforCenteredText(g2, text), y+12);
-    }
-
-    public void battleMenu(Graphics2D g2){
         String text = "";
-        int x = 0;
-        int y = 0;
-        if(!isAttacking){
+
+        if(!isAttacking && !isEnemyTurn){
             text = "ATTACK";
             g2.setFont(g2.getFont().deriveFont(25f));
             g2.setColor(Color.white);
@@ -192,6 +145,16 @@ public class BattleScreen implements Screen{
                 g2.drawString("SKILL", x, y);
             }
 
+            text = "INVENTORY";
+            g2.setFont(g2.getFont().deriveFont(25f));
+            g2.setColor(Color.white);
+            y += gp.tileSize;
+            g2.drawString(text, x, y);
+            if(commandNum == 2  && !isAttacking){
+                g2.setColor(new Color(255, 0, 0));
+                g2.drawString("INVENTORY", x, y);
+            }
+
             text = "FLEE";
             g2.setFont(g2.getFont().deriveFont(25f));
             g2.setColor(Color.white);
@@ -203,6 +166,7 @@ public class BattleScreen implements Screen{
             }
         }
         else{
+
             g2.setFont(g2.getFont().deriveFont(25f));
             x = gp.tileSize/2+5;
             y = gp.tileSize*10+5;
@@ -233,12 +197,179 @@ public class BattleScreen implements Screen{
                 g2.drawString("LEGS", x, y);
             }
         }
-
     }
 
     public void attack() {
         isAttacking = true;
         commandNum = 0;
+    }
+
+    private void drawPartyMembers(Graphics2D g2) {
+        int baseX = gp.tileSize * 2;
+        int baseY = gp.screenHeight / 2 - gp.tileSize * 3;
+        int spacing = gp.tileSize * 4;
+
+        int x = baseX;
+        int y = baseY;
+        for (int i = 0; i < battleQueue.size(); i++) {
+            Entity entity = battleQueue.get(i);
+            if (entity != null && entity != currentEnemy) {
+                if (entity == gp.player) {
+                    x = baseX + (spacing);
+                    y = baseY + (gp.tileSize * 2);
+                }
+                else if (entity == gp.companion2){
+                    x = baseX;
+                    y = baseY + (spacing);
+                }
+                else{
+                    x = baseX;
+                    y = baseY;
+                }
+
+                BufferedImage sprite = entity.right1;
+
+                g2.drawImage(sprite, x, y, gp.tileSize*2, gp.tileSize*2, null);
+
+                g2.setColor(Color.WHITE);
+                g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
+                g2.drawString(entity.getName(), x, y-50);
+                String text = "Level: " + entity.level;
+                g2.drawString(text, x, y-35);
+
+                double oneScale = gp.tileSize/entity.maxHP;
+                double hpBarValue = oneScale * entity.hp;
+
+                g2.setColor(new Color(255, 255, 255));
+                g2.fillRect(x, y-33, gp.tileSize, 10);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(x, y-31, (int) hpBarValue, 8);
+
+                text = gp.df.format(entity.hp) + "/" + gp.df.format(entity.maxHP);
+                g2.setFont(g2.getFont().deriveFont( 10f));
+                g2.setColor(Color.white);
+                g2.drawString(text, x + gp.tileSize+2, y-23);
+
+                double oneScale1 = gp.tileSize/entity.maxEnergy;
+                double energyBarValue = oneScale1 * entity.energy;
+
+                g2.setColor(new Color(255, 255, 255));
+                g2.fillRect(x, y-22, gp.tileSize, 10);
+
+                g2.setColor(new Color(255, 227, 24));
+                g2.fillRect(x, y-20, (int) energyBarValue, 8);
+
+                text = gp.df.format(entity.energy) + "/" + gp.df.format(entity.maxEnergy);
+                g2.setFont(g2.getFont().deriveFont( 10f));
+                g2.setColor(Color.white);
+                g2.drawString(text, x + gp.tileSize+2, y-9);
+
+                if (i == currentTurn) {
+                    g2.setColor(Color.YELLOW);
+                    g2.drawRect(x - 2, y - 2, gp.tileSize*2 + 4, gp.tileSize*2  + 4);
+                }
+                if(entity.isAttacked){
+                    damaged(g2, entity, x, y);
+                }
+            }
+        }
+    }
+
+    public void drawTurnQueue(Graphics2D g2) {
+        int baseX = gp.tileSize;
+        int baseY = gp.tileSize;
+        int spacing = gp.tileSize * 2; // Fixed spacing
+
+        int x = baseX;
+        int y = baseY;
+
+        for (int i = 0; i < battleQueue.size(); i++) {
+            Entity entity = battleQueue.get(i);
+
+            BufferedImage sprite = entity.down1;
+
+            g2.drawImage(sprite, x, y, gp.tileSize, gp.tileSize, null);
+
+            if (i == currentTurn) {
+                g2.setColor(Color.YELLOW);
+                g2.drawRect(x - 2, y - 2, gp.tileSize + 4, gp.tileSize + 4);
+            }
+
+            x += spacing;
+        }
+    }
+
+    public void drawEnemy(Graphics2D g2){
+        for (int i = 0; i < battleQueue.size(); i++) {
+            Entity entity = battleQueue.get(i);
+            if (entity != null && entity == currentEnemy) {
+                int x = gp.screenWidth / 2 + gp.tileSize * 2;
+                int y = gp.screenHeight / 2 - gp.tileSize;
+                BufferedImage sprite = currentEnemy.left1;
+
+                g2.drawImage(sprite, x, y, gp.tileSize*2, gp.tileSize*2, null);
+
+                g2.setColor(Color.WHITE);
+                g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
+                g2.drawString(currentEnemy.getName(), x, y - 50);
+                String text = "Level: " + currentEnemy.level;
+                g2.drawString(text, x, y - 35);
+
+                double oneScale = gp.tileSize / currentEnemy.maxHP;
+                double hpBarValue = oneScale * currentEnemy.hp;
+
+                g2.setColor(new Color(255, 255, 255));
+                g2.fillRect(x, y - 33, gp.tileSize, 10);
+
+                g2.setColor(new Color(255, 0, 30));
+                g2.fillRect(x, y - 31, (int) hpBarValue, 8);
+
+                text = gp.df.format(currentEnemy.hp) + "/" + gp.df.format(currentEnemy.maxHP);
+                g2.setFont(g2.getFont().deriveFont(10f));
+                g2.setColor(Color.white);
+                g2.drawString(text, x + gp.tileSize + 2, y - 23);
+
+                double oneScale1 = gp.tileSize / currentEnemy.maxEnergy;
+                double energyBarValue = oneScale1 * currentEnemy.energy;
+
+                g2.setColor(new Color(255, 255, 255));
+                g2.fillRect(x, y - 22, gp.tileSize, 10);
+
+                g2.setColor(new Color(255, 227, 24));
+                g2.fillRect(x, y - 20, (int) energyBarValue, 8);
+
+                text = gp.df.format(currentEnemy.energy) + "/" + gp.df.format(currentEnemy.maxEnergy);
+                g2.setFont(g2.getFont().deriveFont(10f));
+                g2.setColor(Color.white);
+                g2.drawString(text, x + gp.tileSize + 2, y - 9);
+
+                if (i == currentTurn) {
+                    g2.setColor(Color.YELLOW);
+                    g2.drawRect(x - 2, y - 2, gp.tileSize*2  + 4, gp.tileSize*2  + 4);
+                }
+                if(currentEnemy.isAttacked){
+                    damaged(g2, entity, x, y);
+                }
+            }
+        }
+    }
+
+    public void damaged(Graphics2D g2, Entity entity, int x, int y){
+        if(entity.isAttacked){
+            y++;
+            damageBuffer++;
+            g2.setColor(new Color(0, 0, 0));
+            g2.setFont(g2.getFont().deriveFont(20f));
+            g2.drawString(String.valueOf(damage), x + gp.tileSize*2 + 10, y - gp.tileSize);
+            g2.setColor(new Color(255, 0, 0));
+            g2.setFont(g2.getFont().deriveFont(18f));
+            g2.drawString(String.valueOf(damage), x + gp.tileSize*2 + 10, y - gp.tileSize );
+            if(damageBuffer > 200){
+                entity.isAttacked = false;
+                damageBuffer = 0;
+            }
+        }
     }
 
     public void damage(String targetArea) {
@@ -249,7 +380,6 @@ public class BattleScreen implements Screen{
         int hitChance = 0;
         double damageMultiplier = 1.0;
 
-
         switch (targetArea) {
             case "HEAD":
                 hitChance = (int)(40 + (luckFactor * 100));
@@ -259,16 +389,25 @@ public class BattleScreen implements Screen{
                 hitChance = (int)(85 + (luckFactor * 100));
                 damageMultiplier = 1.0;
                 break;
+            case "LEGS":
+                hitChance = (int)(65 + (luckFactor * 100));
+                damageMultiplier = 1.0;
+
+                currentEnemy.speed -= 1;
+                break;
         }
 
         if (hitRoll <= hitChance) {
-            int damage = (int) ((gp.player.attack - currentEnemy.defense) * damageMultiplier);
+            damage = (gp.player.attack - currentEnemy.defense) * damageMultiplier;
             damage = Math.max(damage, 1);
             currentEnemy.hp -= damage;
+            currentEnemy.isAttacked = true;
             if(currentEnemy.hp < 0){
                 currentEnemy.hp = 0;
             }
-            spriteNum = 2;
+//            gp.ui.addMessage("Hit!" + gp.player.getName() + " deals " + damage + " damage to " + currentEnemy.getName());
+        } else {
+//            gp.ui.addMessage(gp.player.getName() + " missed!");
         }
 
         if(currentEnemy.hp == 0){
@@ -301,7 +440,7 @@ public class BattleScreen implements Screen{
         }
 
         if (hitRoll <= hitChance) {
-            int damage = (int) ((currentEnemy.attack - gp.player.defense) * damageMultiplier);
+            damage = (currentEnemy.attack - gp.player.defense) * damageMultiplier;
             damage = Math.max(damage, 1);
             gp.player.hp -= damage;
             if(gp.player.hp < 0){

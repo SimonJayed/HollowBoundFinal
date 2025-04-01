@@ -68,6 +68,8 @@ public abstract class Entity {
     public boolean hpBarOn = true;
     public boolean hasEvent = false;
 
+    public boolean isAttacked = false;
+
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
     public int dyingCounter = 0;

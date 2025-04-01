@@ -64,6 +64,7 @@ public class UI {
         else if(gp.gameState == gp.inventoryState){
             gp.map.miniMapOn = true;
             drawPlayerLife();
+            gp.inventoryScreen.loadImages();
             gp.inventoryScreen.draw(g2);
         }
         else if (gp.gameState == gp.titleState) {

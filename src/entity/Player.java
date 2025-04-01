@@ -219,9 +219,8 @@ public class Player extends Entity{
                     gp.livingEntity[gp.currentMap][i].speak();
                 }
                 else{
-                    gp.battleScreen.currentEnemy = gp.livingEntity[gp.currentMap][i];
+                    gp.battleScreen.startBattle(gp.livingEntity[gp.currentMap][i]);
                     gp.battleScreen.canEscape = true;
-                    gp.gameState = gp.battleState;
                 }
             }
         }

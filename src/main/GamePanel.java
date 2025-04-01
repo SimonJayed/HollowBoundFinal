@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Thread gameThread;
 
     public Player player = new Player(this, keyH);
+    public Entity companion1, companion2;
     public Entity objectEntity[][] = new Entity[maxMap][30];
     public Entity foreground[][] = new Entity[maxMap][30];
     public Entity livingEntity[][] = new Entity[maxMap][20];
