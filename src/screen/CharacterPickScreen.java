@@ -86,7 +86,7 @@ public class CharacterPickScreen implements Screen{
         }
         else{
             if(commandNum == 0){
-                g2.drawImage(pickAmaryllis, x, y,gp.screenWidth, gp. screenHeight, null);
+                g2.drawImage(pickAmaryllis, x - gp.tileSize, y,gp.screenWidth, gp. screenHeight, null);
                 showAmaryllisInfo();
             }
             else if(commandNum == 1){
@@ -103,12 +103,10 @@ public class CharacterPickScreen implements Screen{
     }
 
     public void showFortInfo(){
-        gp.ui.drawSubWindow(gp.tileSize, gp.tileSize*3, gp.tileSize*8, gp.tileSize*9);
+        gp.ui.drawSubWindow(gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
     }
-    public void showAmaryllisInfo(){
-        gp.ui.drawSubWindow(gp.tileSize*9, gp.tileSize*3, gp.tileSize*8, gp.tileSize*9);
-    }
+    public void showAmaryllisInfo(){ gp.ui.drawSubWindow(gp.tileSize*8, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);}
     public void showSylvieInfo(){
-        gp.ui.drawSubWindow(gp.tileSize, gp.tileSize*3, gp.tileSize*8, gp.tileSize*9);
+        gp.ui.drawSubWindow(gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
     }
 }

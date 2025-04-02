@@ -89,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame(){
         ui.startFadeIn();
+        ui.loadImages();
         aSetter.setObjectEntity();
         aSetter.setLivingEntity();
         gameState = titleState;

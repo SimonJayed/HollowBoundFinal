@@ -12,9 +12,11 @@ import java.util.*;
 
 public class BattleScreen implements Screen{
     GamePanel gp;
+    Graphics2D g2;
 
 
     BufferedImage background = null;
+    BufferedImage actionWindow = null;
 
     public ArrayList<Entity> battleQueue = new ArrayList<>();
     public Entity currentEnemy;
@@ -36,9 +38,12 @@ public class BattleScreen implements Screen{
     }
 
     public void loadImages(){
+        UtilityTool uTool = new UtilityTool();
         try {
             if(gp.currentMap == 0){
                 background = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/background/battle/forestIntro.png")));
+                actionWindow = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/actionWindow1.png")));
+                actionWindow = uTool.scaleImage(actionWindow, gp.screenWidth, gp.screenHeight);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,6 +71,7 @@ public class BattleScreen implements Screen{
 
     @Override
     public void draw(Graphics2D g2){
+        this.g2 = g2;
         g2.setColor(Color.white);
         g2.drawImage(background, 0, 0, gp.screenWidth, gp.screenHeight, null);
 
@@ -112,91 +118,11 @@ public class BattleScreen implements Screen{
     public void drawMenu(Graphics2D g2){
 
         int x = gp.tileSize/2;
-        int y = gp.tileSize*9 + (gp.tileSize/2);
-        g2.setColor(new Color(0,0,0, 200));
-        g2.fillRoundRect(x, y, gp.tileSize*5, gp.tileSize*4, 20, 20);
+        int y = gp.tileSize;
 
-        x += gp.tileSize*5 + gp.tileSize;
-        g2.setColor(new Color(0,0,0, 200));
-        g2.fillRoundRect(x, y, gp.tileSize*11, gp.tileSize*4, 20, 20);
+        x += gp.tileSize*8;
+        gp.ui.drawSubWindow(x, y, gp.tileSize*9, gp.tileSize*4);
 
-        String text = "";
-
-        if(!isAttacking && !isEnemyTurn){
-            text = "ATTACK";
-            g2.setFont(g2.getFont().deriveFont(25f));
-            g2.setColor(Color.white);
-            x = gp.tileSize/2+5;
-            y = gp.tileSize*10+5;
-            g2.drawString(text, x, y);
-
-            if(commandNum == 0){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("ATTACK", x, y);
-            }
-
-            text = "SKILL";
-            g2.setFont(g2.getFont().deriveFont(25f));
-            g2.setColor(Color.white);
-            y += gp.tileSize;
-            g2.drawString(text, x, y);
-            if(commandNum == 1  && !isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("SKILL", x, y);
-            }
-
-            text = "INVENTORY";
-            g2.setFont(g2.getFont().deriveFont(25f));
-            g2.setColor(Color.white);
-            y += gp.tileSize;
-            g2.drawString(text, x, y);
-            if(commandNum == 2  && !isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("INVENTORY", x, y);
-            }
-
-            text = "FLEE";
-            g2.setFont(g2.getFont().deriveFont(25f));
-            g2.setColor(Color.white);
-            y += gp.tileSize;
-            g2.drawString(text, x, y);
-            if(commandNum == 3 && !isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("FLEE", x, y);
-            }
-        }
-        else{
-
-            g2.setFont(g2.getFont().deriveFont(25f));
-            x = gp.tileSize/2+5;
-            y = gp.tileSize*10+5;
-            g2.setColor(Color.white);
-            g2.drawString("HEAD", x, y);
-            if(commandNum == 0 && isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("HEAD", x, y);
-            }
-
-            g2.setFont(g2.getFont().deriveFont(25f));
-            x = gp.tileSize/2+5;
-            y += gp.tileSize;
-            g2.setColor(Color.white);
-            g2.drawString("TORSO", x, y);
-            if(commandNum == 1 && isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("TORSO", x, y);
-            }
-
-            g2.setFont(g2.getFont().deriveFont(25f));
-            x = gp.tileSize/2+5;
-            y += gp.tileSize;
-            g2.setColor(Color.white);
-            g2.drawString("LEGS", x, y);
-            if(commandNum == 2 && isAttacking){
-                g2.setColor(new Color(255, 0, 0));
-                g2.drawString("LEGS", x, y);
-            }
-        }
     }
 
     public void attack() {
@@ -205,8 +131,8 @@ public class BattleScreen implements Screen{
     }
 
     private void drawPartyMembers(Graphics2D g2) {
-        int baseX = gp.tileSize * 2;
-        int baseY = gp.screenHeight / 2 - gp.tileSize * 3;
+        int baseX = gp.tileSize * 2 + gp.tileSize/2;
+        int baseY = gp.screenHeight / 2 - gp.tileSize * 2;
         int spacing = gp.tileSize * 4;
 
         int x = baseX;
@@ -268,10 +194,37 @@ public class BattleScreen implements Screen{
                 if (i == currentTurn) {
                     g2.setColor(Color.YELLOW);
                     g2.drawRect(x - 2, y - 2, gp.tileSize*2 + 4, gp.tileSize*2  + 4);
+                    if(!isAttacking) {
+                        int tempX = x - (gp.tileSize*2+gp.tileSize/2);
+                        int tempY = y + 15;
+                        drawOption("ATTACK", tempX, tempY, 0);
+                        tempX += 10;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("SKILL", tempX, tempY, 1);
+                        tempX += 10;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("ITEM", tempX, tempY, 2);
+                        tempX += 10;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("FLEE", tempX, tempY, 3);
+                    }
+                    if(isAttacking){
+                        int tempX = x - gp.tileSize*2;
+                        int tempY = y + 10;
+                        drawOption("HEAD", tempX, tempY, 0);
+                        tempX += 10;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("TORSO", tempX, tempY, 1);
+                    }
                 }
                 if(entity.isAttacked){
                     damaged(g2, entity, x, y);
                 }
+
             }
         }
     }
@@ -279,7 +232,7 @@ public class BattleScreen implements Screen{
     public void drawTurnQueue(Graphics2D g2) {
         int baseX = gp.tileSize;
         int baseY = gp.tileSize;
-        int spacing = gp.tileSize * 2; // Fixed spacing
+        int spacing = gp.tileSize;
 
         int x = baseX;
         int y = baseY;
@@ -305,7 +258,7 @@ public class BattleScreen implements Screen{
             Entity entity = battleQueue.get(i);
             if (entity != null && entity == currentEnemy) {
                 int x = gp.screenWidth / 2 + gp.tileSize * 2;
-                int y = gp.screenHeight / 2 - gp.tileSize;
+                int y = gp.screenHeight / 2;
                 BufferedImage sprite = currentEnemy.left1;
 
                 g2.drawImage(sprite, x, y, gp.tileSize*2, gp.tileSize*2, null);
@@ -361,10 +314,10 @@ public class BattleScreen implements Screen{
             damageBuffer++;
             g2.setColor(new Color(0, 0, 0));
             g2.setFont(g2.getFont().deriveFont(20f));
-            g2.drawString(String.valueOf(damage), x + gp.tileSize*2 + 10, y - gp.tileSize);
+            g2.drawString("-"+damage, x + gp.tileSize*2 + 10, y - gp.tileSize);
             g2.setColor(new Color(255, 0, 0));
             g2.setFont(g2.getFont().deriveFont(18f));
-            g2.drawString(String.valueOf(damage), x + gp.tileSize*2 + 10, y - gp.tileSize );
+            g2.drawString("-"+damage, x + gp.tileSize*2 + 10, y - gp.tileSize );
             if(damageBuffer > 200){
                 entity.isAttacked = false;
                 damageBuffer = 0;
@@ -388,12 +341,6 @@ public class BattleScreen implements Screen{
             case "TORSO":
                 hitChance = (int)(85 + (luckFactor * 100));
                 damageMultiplier = 1.0;
-                break;
-            case "LEGS":
-                hitChance = (int)(65 + (luckFactor * 100));
-                damageMultiplier = 1.0;
-
-                currentEnemy.speed -= 1;
                 break;
         }
 
@@ -431,11 +378,6 @@ public class BattleScreen implements Screen{
             case "TORSO":
                 hitChance = (int)(85 + (luckFactor * 100));
                 damageMultiplier = 1.0;
-                break;
-            case "LEGS":
-                hitChance = (int)(65 + (luckFactor * 100));
-                damageMultiplier = 1.0;
-                gp.player.speed -= 1;
                 break;
         }
 
@@ -508,12 +450,26 @@ public class BattleScreen implements Screen{
                     damagePlayer("TORSO");
                     break;
                 }
-                case 2:{
-                    damagePlayer("LEGS");
-                    break;
-                }
             }
         }
+    }
+
+    public void drawOption(String option, int x, int y, int commandNum){
+        g2.setColor(new Color(20, 61, 143, 200));
+//        g2.fillRoundRect(x-8, y-gp.tileSize/2+5, gp.tileSize*2+gp.tileSize/2, gp.tileSize/2, 5, 5);
+        drawActionWindow(x-8, y-gp.tileSize/2+5, gp.tileSize*2+gp.tileSize/2, gp.tileSize/2);
+        g2.setFont(g2.getFont().deriveFont(20f));
+        g2.setColor(new Color(59, 61, 62));
+        g2.drawString(option, x, y);
+
+        if(this.commandNum == commandNum){
+            g2.setColor(new Color(255, 0, 0));
+            g2.drawString(option, x, y);
+        }
+    }
+
+    public void drawActionWindow(int x, int y, int width, int height){
+        g2.drawImage(actionWindow, x, y, width, height, null);
     }
 
 }

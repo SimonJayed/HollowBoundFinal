@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 import misc.UtilityTool;
 
@@ -7,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Entity {
@@ -38,6 +40,8 @@ public abstract class Entity {
     public double mag;
     public double agi;
     public double luck;
+
+    public ArrayList<Skill> skills = new ArrayList<>();
 
     public int hollowCounter = 0;
 
@@ -469,10 +473,6 @@ public abstract class Entity {
         g2.drawImage(image1, screenX, screenY, null);
 
         changeAlpha(g2,1f);
-    }
-
-    public String toString() {
-        return null;
     }
 
 }

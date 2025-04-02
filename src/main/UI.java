@@ -1,6 +1,8 @@
 package main;
 
 import entity.Entity;
+import misc.UtilityTool;
+import object.OBJ_Heart;
 import object.OBJ_Image;
 
 import javax.imageio.ImageIO;
@@ -16,7 +18,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
 
-    BufferedImage titleBackground;
+    BufferedImage subWindow;
 
     public boolean messageOn = false;
     ArrayList <String> message = new ArrayList<>();
@@ -39,6 +41,16 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
+    }
+
+    public void loadImages(){
+        UtilityTool uTool = new UtilityTool();
+        try{
+            subWindow = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/subWindow.png")));
+            subWindow = uTool.scaleImage(subWindow, gp.screenWidth, gp.screenHeight);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addMessage(String text){
@@ -101,7 +113,6 @@ public class UI {
 
 
     public void drawPlayerLife(){
-
         int x = 0;
         int y = 0;
 
@@ -288,12 +299,13 @@ public class UI {
     }
 
     public void drawSubWindow(int x, int y, int width, int height){
-        Color c = new Color(0, 0, 0, 150);
-        g2.setColor(c);
-        g2.fillRoundRect(x, y, width, height,20, 20);
-
-        g2.setColor(new Color(255,255,255));
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(x, y, width, height, 20, 20);
+        g2.drawImage(subWindow, x, y, width, height, null);
+//        Color c = new Color(0, 0, 0, 150);
+//        g2.setColor(c);
+//        g2.fillRoundRect(x, y, width, height,20, 20);
+//
+//        g2.setColor(new Color(255,255,255));
+//        g2.setStroke(new BasicStroke(5));
+//        g2.drawRoundRect(x, y, width, height, 20, 20);
     }
 }

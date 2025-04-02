@@ -2,8 +2,10 @@ package screen;
 
 import entity.Entity;
 import main.GamePanel;
+import misc.UtilityTool;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
@@ -22,8 +24,10 @@ public class InventoryScreen implements Screen{
     }
 
     public void loadImages() {
+        UtilityTool uTool = new UtilityTool();
         try {
             statPanel = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/statPanel.png")));
+            statPanel = uTool.scaleImage(statPanel, gp.tileSize*15+gp.tileSize/2, gp.tileSize*12 + gp.tileSize/2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,9 +58,9 @@ public class InventoryScreen implements Screen{
         //Inventory Frame
         int frameX = gp.tileSize;
         int frameY = gp.tileSize;
-        int frameWidth = gp.tileSize*15+gp.tileSize/2;
-        int frameHeight  = gp.tileSize*12 + gp.tileSize/2;
-        g2.drawImage(statPanel, frameX, frameY, frameWidth, frameHeight, null);
+//        int frameWidth = gp.tileSize*15+gp.tileSize/2;
+//        int frameHeight  = gp.tileSize*12 + gp.tileSize/2;
+        g2.drawImage(statPanel, frameX, frameY,null);
 
 
         //Inventory Content

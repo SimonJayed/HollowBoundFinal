@@ -42,8 +42,8 @@ public class Player extends Entity{
 
     public void setDefaultValues(){
         gp.currentMap = 0;
-        worldX = spawnPointX = gp.tileSize * 42;
-        worldY = spawnPointY = gp.tileSize * 45;
+        worldX = spawnPointX = gp.tileSize * 14;
+        worldY = spawnPointY = gp.tileSize * 28;
         direction = "down";
 
         statPoints = 1;
