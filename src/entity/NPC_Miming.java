@@ -20,11 +20,17 @@ public class NPC_Miming extends Entity {
         sizeIncrement = gp.randomize(-15, 0);
 
         int skin = gp.randomize(1,10);
-        if(skin == 10){
-            getImage("mamapausy");
+        if(skin <= 3){
+            getImage("miming2");
+        }
+        else if (skin <= 5){
+            getImage("miming3");
+        }
+        else if (skin <= 9){
+            getImage("miming");
         }
         else{
-            getImage("miming");
+            getImage("mamapausy");
         }
 
         setDefaultValues(1, 250, 250,5,5, 8, 10, 13, 9);

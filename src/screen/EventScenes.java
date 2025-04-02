@@ -237,6 +237,7 @@ public class EventScenes implements Screen{
 
             gp.livingEntity[3][0].isIdling = false;
             if(gp.livingEntity[3][0].collisionOn && sequenceCheck == 0){
+                gp.battleScreen.canEscape = false;
                 gp.battleScreen.startBattle(gp.livingEntity[3][0]);
                 gp.player.isUnconscious = true;
                 buffer = 0;

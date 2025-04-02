@@ -264,8 +264,14 @@ public class AssetSetter {
         gp.livingEntity[4][i] = new NPC_Miming(gp);
         gp.livingEntity[4][i].worldX = gp.livingEntity[4][i].spawnPointX = 36 * gp.tileSize;
         gp.livingEntity[4][i].worldY = gp.livingEntity[4][i].spawnPointY = 31 * gp.tileSize;
-        i++;
 
+
+        //MAP 5
+        i = 0;
+        gp.livingEntity[5][i] = new MOB_Swordsman(gp);
+        gp.livingEntity[5][i].worldX = gp.livingEntity[5][i].spawnPointX = 36 * gp.tileSize;
+        gp.livingEntity[5][i].worldY = gp.livingEntity[5][i].spawnPointY = 31 * gp.tileSize;
+        i++;
 
         //MAP 8
         i = 0;

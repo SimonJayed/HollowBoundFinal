@@ -21,6 +21,7 @@ public class Player extends Entity{
     public int statPoints = 0;
 
     public BufferedImage attack1, attack2;
+    public BufferedImage runUp1, runUp2, runDown1, runDown2, runLeft1, runLeft2, runRight1, runRight2;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -38,6 +39,30 @@ public class Player extends Entity{
         this.solidArea.height = 33;
 
         buffer = 0;
+    }
+
+    public void getImage(String folder) {
+        up1 = setup("/sprites/" + folder + "/up1", gp.tileSize, gp.tileSize);
+        up2 = setup("/sprites/" + folder + "/up2", gp.tileSize, gp.tileSize);
+        down1 = setup("/sprites/" + folder + "/down1", gp.tileSize, gp.tileSize);
+        down2 = setup("/sprites/" + folder + "/down2", gp.tileSize, gp.tileSize);
+        left1 = setup("/sprites/" + folder + "/left1", gp.tileSize, gp.tileSize);
+        left2 = setup("/sprites/" + folder + "/left2", gp.tileSize, gp.tileSize);
+        right1 = setup("/sprites/" + folder + "/right1", gp.tileSize, gp.tileSize);
+        right2 = setup("/sprites/" + folder + "/right2", gp.tileSize, gp.tileSize);
+        portrait = setup("/sprites/" + folder + "/portrait", gp.tileSize, gp.tileSize);
+
+        defeated1 = setup("/sprites/" + folder + "/defeated/front", gp.tileSize, gp.tileSize);
+        defeated2 = setup("/sprites/" + folder + "/defeated/side", gp.tileSize, gp.tileSize);
+
+        runUp1 = setup("/sprites/" + folder + "/running/up1", gp.tileSize, gp.tileSize);
+        runUp2 = setup("/sprites/" + folder + "/running/up2", gp.tileSize, gp.tileSize);
+        runDown1 = setup("/sprites/" + folder + "/running/down1", gp.tileSize, gp.tileSize);
+        runDown2 = setup("/sprites/" + folder + "/running/down2", gp.tileSize, gp.tileSize);
+        runLeft1 = setup("/sprites/" + folder + "/running/left1", gp.tileSize, gp.tileSize);
+        runLeft2 = setup("/sprites/" + folder + "/running/left2", gp.tileSize, gp.tileSize);
+        runRight1 = setup("/sprites/" + folder + "/running/right1", gp.tileSize, gp.tileSize);
+        runRight2 = setup("/sprites/" + folder + "/running/right2", gp.tileSize, gp.tileSize);
     }
 
     public void setDefaultValues(){
@@ -83,7 +108,6 @@ public class Player extends Entity{
         this.attack = pow * 3;
         this.defense = vit * 1.5;
     }
-
 
     public void update() {
         if (!keyH.upPressed && !keyH.downPressed && !keyH.rightPressed && !keyH.leftPressed){
@@ -190,6 +214,10 @@ public class Player extends Entity{
                     num++;
                     System.out.println(getName() + " is being strengthened.");
                 }
+                gp.companion1.hp = gp.companion1.maxHP;
+                gp.companion1.energy = gp.companion1.maxEnergy;
+                gp.companion2.hp = gp.companion2.maxHP;
+                gp.companion2.energy = gp.companion2.maxEnergy;
                 gp.player.worldX = spawnPointX;
                 gp.player.worldY = spawnPointY;
                 System.out.println(getName() + " has respawned.");

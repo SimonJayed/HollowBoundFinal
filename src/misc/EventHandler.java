@@ -84,11 +84,7 @@ public class EventHandler{
 
             //ENCOUNTERS
             if(hit(1,19,47, "any") || hit(1,19,44, "any") || hit(1,19,45, "any") || hit(1,19,44, "any")){
-                boolean eventFinished = false;
-                if(!eventFinished){
-//                    opponentEncounter(gp.livingEntity[gp.currentMap], 4, 19, 47);
-                    eventFinished = true;
-                }
+                opponentEncounter(gp.livingEntity[gp.currentMap], 4, 19, 47);
             }
         }
         //MAP 2 (Cat Cave Entrance) EVENTS
@@ -313,7 +309,6 @@ public class EventHandler{
             if(entity[gp.currentMap] != null && entity[gp.currentMap].isAlive){
                 gp.gameState = gp.eventState;
                 entity[gp.currentMap].isIdling = false;
-                gp.battleScreen.currentEnemy = entity[gp.currentMap];
             }
             else{
                 entity[gp.currentMap] = null;

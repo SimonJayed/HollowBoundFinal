@@ -166,10 +166,12 @@ public class KeyHandler implements KeyListener {
                                 }
                                 else {
                                     System.out.println("Escape Failed.");
+                                    gp.ui.addMessage("Escape Failed");
                                 }
                             }
                             else{
                                 System.out.println("Can't Escape.");
+                                gp.ui.addMessage("Can't Escape");
                             }
                             gp.battleScreen.isAttacking = false;
                         }
@@ -196,16 +198,14 @@ public class KeyHandler implements KeyListener {
                     }
                     if(code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE){
                         if(gp.battleScreen.commandNum == 0){
-                            gp.battleScreen.damage("HEAD");
+                            gp.battleScreen.playerAttack("HEAD");
                         }
                         if(gp.battleScreen.commandNum == 1){
-                            gp.battleScreen.damage("TORSO");
+                            gp.battleScreen.playerAttack("TORSO");
                         }
                         if(gp.battleScreen.commandNum == 2){
-                            gp.battleScreen.damage("LEGS");
+                            gp.battleScreen.playerAttack("LEGS");
                         }
-                        gp.battleScreen.isAttacking = false;
-                        gp.battleScreen.currentTurnFinished = true;
                         gp.playSoundEffect(3);
                         gp.sound.setVolume(-20.0f);
                     }

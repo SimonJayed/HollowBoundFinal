@@ -107,6 +107,6 @@ public class CharacterPickScreen implements Screen{
     }
     public void showAmaryllisInfo(){ gp.ui.drawSubWindow(gp.tileSize*8, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);}
     public void showSylvieInfo(){
-        gp.ui.drawSubWindow(gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
+        gp.ui.drawSubWindow(gp.tileSize+gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
     }
 }

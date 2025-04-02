@@ -71,7 +71,6 @@ public class UI {
             drawPlayerLife();
             gp.map.miniMapOn = true;
             playTime += (double) 1 / 60;
-            drawMessage();
         }
         else if(gp.gameState == gp.inventoryState){
             gp.map.miniMapOn = true;
@@ -188,9 +187,9 @@ public class UI {
         g2.drawString(text + text2, x, y+15);
     }
 
-    public void drawMessage(){
-        int messageX = gp.tileSize/2;
-        int messageY = gp.tileSize*2;
+    public void drawMessage(int x, int y){
+        int messageX = x;
+        int messageY = y;
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16f));
 
@@ -198,16 +197,24 @@ public class UI {
 
             if (message.get(i) != null){
 
-                g2.setColor(Color.white);
+                g2.setColor(new Color(255, 255, 255));
                 g2.drawString(message.get(i), messageX, messageY);
 
                 int counter = messageCounter.get(i) + 1;
                 messageCounter.set(i, counter);
-                messageY += 50;
+                messageY += 25;
 
-                if (messageCounter.get(i) > 250){
-                    message.remove(i);
-                    messageCounter.remove(i);
+                if(gp.gameState == gp.battleState){
+                    if (messageCounter.get(i) > 250 || i > 3){
+                        message.removeFirst();
+                        messageCounter.removeFirst();
+                    }
+                }
+                else{
+                    if (messageCounter.get(i) > 250){
+                        message.remove(i);
+                        messageCounter.remove(i);
+                    }
                 }
             }
         }
@@ -299,13 +306,12 @@ public class UI {
     }
 
     public void drawSubWindow(int x, int y, int width, int height){
-        g2.drawImage(subWindow, x, y, width, height, null);
-//        Color c = new Color(0, 0, 0, 150);
-//        g2.setColor(c);
-//        g2.fillRoundRect(x, y, width, height,20, 20);
-//
-//        g2.setColor(new Color(255,255,255));
-//        g2.setStroke(new BasicStroke(5));
-//        g2.drawRoundRect(x, y, width, height, 20, 20);
+        Color c = new Color(0, 0, 0, 150);
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height,20, 20);
+
+        g2.setColor(new Color(255,255,255));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x, y, width, height, 20, 20);
     }
 }

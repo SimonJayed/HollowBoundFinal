@@ -46,7 +46,6 @@ public abstract class Entity {
     public int hollowCounter = 0;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage runUp1, runUp2, runDown1, runDown2, runLeft1, runLeft2, runRight1, runRight2;
     public BufferedImage defeated1, defeated2;
     public BufferedImage image1, image2, image3, image4;
     public BufferedImage portrait;
@@ -71,8 +70,11 @@ public abstract class Entity {
     public boolean isUnconscious = false;
     public boolean hpBarOn = true;
     public boolean hasEvent = false;
+    public boolean isMob = false;
 
     public boolean isAttacked = false;
+    public boolean isHealed = false;
+    public boolean dodged = false;
 
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
@@ -171,15 +173,6 @@ public abstract class Entity {
 
         defeated1 = setup("/sprites/" + folder + "/defeated/front", gp.tileSize, gp.tileSize);
         defeated2 = setup("/sprites/" + folder + "/defeated/side", gp.tileSize, gp.tileSize);
-
-        runUp1 = setup("/sprites/" + folder + "/running/up1", gp.tileSize, gp.tileSize);
-        runUp2 = setup("/sprites/" + folder + "/running/up2", gp.tileSize, gp.tileSize);
-        runDown1 = setup("/sprites/" + folder + "/running/down1", gp.tileSize, gp.tileSize);
-        runDown2 = setup("/sprites/" + folder + "/running/down2", gp.tileSize, gp.tileSize);
-        runLeft1 = setup("/sprites/" + folder + "/running/left1", gp.tileSize, gp.tileSize);
-        runLeft2 = setup("/sprites/" + folder + "/running/left2", gp.tileSize, gp.tileSize);
-        runRight1 = setup("/sprites/" + folder + "/running/right1", gp.tileSize, gp.tileSize);
-        runRight2 = setup("/sprites/" + folder + "/running/right2", gp.tileSize, gp.tileSize);
     }
 
     public void speak(){
@@ -252,11 +245,10 @@ public abstract class Entity {
 
         if(contactPlayer && gp.gameState == gp.eventState){
             if(type == 2){
-                gp.gameState = gp.battleState;
+                gp.battleScreen.startBattle(this);
             }
             else{
                 speak();
-                gp.gameState = gp.eventState;
                 gp.event.dialogueOn = true;
             }
         }
@@ -296,6 +288,7 @@ public abstract class Entity {
         if(isDefeated && hollowCounter < 5){
             this.deathBuffer++;
             isIdling = true;
+            collision = false;
             if(this.deathBuffer > 250 && !hasEvent){
                 isDefeated = false;
                 hp = maxHP;
@@ -311,6 +304,7 @@ public abstract class Entity {
                 this.deathBuffer = 0;
                 this.worldX = this.spawnPointX;
                 this.worldY = this.spawnPointY;
+                collision = true;
                 System.out.println(getName() + " has respawned.");
                 System.out.println(getName() + " died " + hollowCounter + " times");
             }
@@ -462,7 +456,7 @@ public abstract class Entity {
                 }
             }
         }
-//        displayEntityStats(g2);
+        displayEntityStats(g2);
 
         if (invincible){
             hpBarOn = true;
