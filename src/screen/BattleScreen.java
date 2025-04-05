@@ -79,6 +79,7 @@ public class BattleScreen implements Screen{
         gp.ui.startFadeIn();
         gp.gameState = gp.battleState;
         currentTurn = 0;
+        buffer = 0;
         commandNum = 0;
         loadImages();
         currentEnemy = enemy;
@@ -141,10 +142,9 @@ public class BattleScreen implements Screen{
             return;
         }
 
-        if (currentEntity == currentEnemy && !currentTurnFinished) {
+        if (currentEntity == currentEnemy) {
             isEnemyTurn = true;
-            System.out.println("Enemy Choosing. ");
-            if (buffer > 50) {
+            if (buffer > 25) {
                 enemyTurn();
                 isEnemyTurn = false;
                 currentTurnFinished = true;
@@ -266,21 +266,21 @@ public class BattleScreen implements Screen{
                         int tempY = y + 10;
                         drawOption("Skill 1", tempX, tempY, 0);
                         if(commandNum == 0){
-                            gp.ui.addDescription(entity.skills.get(0).name + "\n \n" + entity.skills.get(0).description + "\n Skill Power: " + gp.df.format(entity.skills.get(0).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(0).energyCost));
+                            gp.ui.addDescription(entity.skills.get(0).toString() );
                         }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("Skill 2", tempX, tempY, 1);
                         if(commandNum == 1){
-                            gp.ui.addDescription(entity.skills.get(1).name + "\n \n" + entity.skills.get(1).description + "\n Skill Power: " + gp.df.format(entity.skills.get(1).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(1).energyCost));
+                            gp.ui.addDescription(entity.skills.get(1).toString() );
                         }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("Ultimate", tempX, tempY, 2);
                         if(commandNum == 2){
-                            gp.ui.addDescription(entity.skills.get(2).name + "\n \n" + entity.skills.get(2).description + "\n Skill Power: " + gp.df.format(entity.skills.get(2).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(2).energyCost));
+                            gp.ui.addDescription(entity.skills.get(2).toString() );
                         }
                     }
                     else if(isAttacking){
@@ -459,6 +459,24 @@ public class BattleScreen implements Screen{
         }
     }
 
+
+    public void useSkill(int skillIndex, Entity target) {
+        Entity currentEntity = battleQueue.get(currentTurn);
+
+        if (currentEntity.energy < currentEntity.skills.get(skillIndex).energyCost) {
+            gp.ui.addMessage(currentEntity.getName() + " doesn't have enough energy!");
+            choosingSkill = false;
+            return;
+        }
+        currentEntity.useSkill(skillIndex, target);
+
+        currentEntity.energy -= currentEntity.skills.get(skillIndex).energyCost;
+
+        choosingSkill = false;
+        currentTurnFinished = true;
+        commandNum = 0;
+    }
+
     public void playerAttack(String targetArea) {
         Entity attacker = battleQueue.get(currentTurn);
 
@@ -483,13 +501,15 @@ public class BattleScreen implements Screen{
         }
 
         isAttacking = false;
+        choosingSkill = false;
         currentTurnFinished = true;
+        commandNum = 0;
     }
 
     public void enemyAttack(Entity target) {
         if (currentEnemy == null) return;
 
-        String targetArea = (gp.randomize(0, 10) >= 8) ? "HEAD" : "TORSO";
+        String targetArea = (gp.randomize(0, 10) >= 9) ? "HEAD" : "TORSO";
 
         damage = calculateDamage(currentEnemy, target, targetArea);
 
@@ -527,15 +547,17 @@ public class BattleScreen implements Screen{
     }
 
     public void endBattle(){
-        double expGain = currentEnemy.nextLevelExp/2;
+        double expGain = currentEnemy.nextLevelExp;
 
         for(Entity member : battleQueue){
             if(member != currentEnemy){
                 member.exp += expGain;
-                member.hp += 5;
+                if(member.hp <= member.maxHP){
+                    member.hp += 5;
+                }
                 member.regen();
                 member.update();
-                System.out.println(member.getName() + " updated.");
+                System.out.println(member.getName() + " updated and got " + expGain + " exp.");
             }
         }
         currentEnemy.isDefeated = true;
@@ -546,10 +568,6 @@ public class BattleScreen implements Screen{
     }
 
     public void enemyEndBattle(){
-        double expGain = gp.player.nextLevelExp/3;
-
-        currentEnemy.exp += expGain;
-
         gp.player.isDefeated = true;
         gp.player.hollowCounter++;
         System.out.println(gp.player.getName() + " has died " + gp.player.hollowCounter + " times");
@@ -561,6 +579,8 @@ public class BattleScreen implements Screen{
         double expGain = gp.player.nextLevelExp;
 
         gp.player.exp += expGain;
+        gp.companion1.exp += expGain;
+        gp.companion2.exp += expGain;
 
         System.out.println(gp.player.getName() + " has died " + gp.player.hollowCounter + " times but its an event");
         gp.gameState = gp.eventState;
@@ -588,7 +608,7 @@ public class BattleScreen implements Screen{
         g2.setColor(new Color(20, 61, 143, 200));
         drawActionWindow(x-8, y-gp.tileSize/2+5, gp.tileSize*2+gp.tileSize/2, gp.tileSize/2);
         g2.setFont(g2.getFont().deriveFont(20f));
-        g2.setColor(new Color(59, 61, 62));
+        g2.setColor(new Color(0, 0, 0));
         g2.drawString(option, x, y);
 
         if(this.commandNum == commandNum){

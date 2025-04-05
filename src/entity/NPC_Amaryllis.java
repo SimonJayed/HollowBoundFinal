@@ -18,7 +18,7 @@ public class NPC_Amaryllis extends Entity {
         this.solidArea.height = 32;
 
         getImage("amaryllis");
-        setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
+        setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
         setDialogue();
 
         skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));
@@ -48,16 +48,6 @@ public class NPC_Amaryllis extends Entity {
         skills.get(2).use();
     }
 
-    public void calculateStats(){
-        this.maxHP = initialHP + (15 * level) + (vit * 2);
-        this.maxEnergy = initialEnergy + (15 * level) + (mag * 2);
-        this.energyRegen = maxEnergy * 0.1 + (mag / 100);
-
-        this.attack = pow * 3;
-        this.defense = vit * 1.5;
-        nextLevelExp = 10 * Math.pow(level, 2);
-    }
-
     public void setAction() {
         actionLockCounter++;
 
@@ -82,10 +72,6 @@ public class NPC_Amaryllis extends Entity {
             actionLockCounter = 0;
         }
         spriteAnim(2);
-    }
-
-    public void speak(){
-        super.speak();
     }
 }
 

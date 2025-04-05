@@ -73,17 +73,23 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
+//        gp.currentMap = 0;
+//        worldX = spawnPointX = gp.tileSize * 1;
+//        worldY = spawnPointY = gp.tileSize * 10;
         gp.currentMap = 0;
-        worldX = spawnPointX = gp.tileSize * 1;
-        worldY = spawnPointY = gp.tileSize * 10;
-        direction = "down";
+        worldX = spawnPointX = gp.tileSize * 46;
+        worldY = spawnPointY = gp.tileSize * 44;
+//        gp.currentMap = 9;
+//        worldX = spawnPointX = gp.tileSize * 2;
+//        worldY = spawnPointY = gp.tileSize * 43;
+//        direction = "right";
 
         statPoints = 5;
         switch(playing){
             case "fort":{
                 setName("Fort");
                 getImage("fort");
-                setDefaultValues(1, 150, 100,4, 15, 6, 4, 5,  15);
+                setDefaultValues(1, 100, 50,4, 15, 6, 4, 5,  15);
                 getCombatImages("fort");
                 skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
                 skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
@@ -93,13 +99,19 @@ public class Player extends Entity{
             case "amaryllis":{
                 setName("Amaryllis");
                 getImage("amaryllis");
-                setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
+                setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
+                skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));
+                skills.add(new Skill("Liquid Experiment", "Gives a random buff to an ally.", 25, maxEnergy*0.3, 2));
+                skills.add(new Skill("Unleash", "Transforms into her beast form and gives a boost to her stats for 3 turns", 135.6, maxEnergy*0.8, 5));
                 break;
             }
             case "sylvie":{
                 setName("Sylvie");
                 getImage("sylvie");
-                setDefaultValues(1, 100, 250,3, 7, 5, 19, 5,  9);
+                setDefaultValues(1, 50, 150,3, 7, 5, 19, 5,  9);
+                skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, maxEnergy*0.2, 2));
+                skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy", 25, maxEnergy*0.4, 1));
+                skills.add(new Skill("Bloom of Life", "Creates an explosion of natural energy that damages enemies and heals allies", 135.6, maxEnergy*0.8, 2));
                 break;
             }
         }
@@ -244,7 +256,7 @@ public class Player extends Entity{
             statPoints += 5;
             setStatIncrements();
             calculateStats();
-            nextLevelExp = 10 * Math.pow(level, 3);
+            nextLevelExp = 10 * Math.pow(level, 2);
             hp = maxHP;
             energy = maxEnergy;
             gp.ui.addMessage(getName() + " has leveled up! (Lvl " + level + ")");
@@ -278,17 +290,16 @@ public class Player extends Entity{
                 stepLimit = gp.randomize(200, 800);
             }
             else{
-                stepLimit = gp.randomize(100, 300);
+                stepLimit = gp.randomize(200, 300);
             }
         }
 
-
-
-        System.out.println(stepLimit + " and " + steps);
+//        System.out.println(stepLimit + " and " + steps);
 
         int enemy = gp.randomize(0,10);
 
         if(steps>=stepLimit){
+            gp.ui.message.clear();
             switch(gp.currentMap){
                 case 0:{
                     areaLevel = 1;
@@ -307,6 +318,38 @@ public class Player extends Entity{
                     break;
                 }
                 case 1:{
+                    areaLevel = 5;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 5){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                    break;
+                }
+                case 2:{
+                    areaLevel = 5;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 5){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                    break;
+                }
+                case 3:{
                     areaLevel = 10;
                     if(enemy >= 8){
                         gp.battleScreen.startBattle(new MOB_Swordsman(gp));

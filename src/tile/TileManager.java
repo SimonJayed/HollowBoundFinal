@@ -31,7 +31,9 @@ public class TileManager {
         loadMap("/maps/forestUphillPath.txt", 3);
         loadMap("/maps/catCave.txt", 4);
         loadMap("/maps/graveyard.txt", 5);
+        loadMap("/maps/oldManForest.txt", 6);
         loadMap("/maps/village.txt", 8);
+        loadMap("/maps/veyraHill.txt", 9);
     }
 
     public void getTileImage() {

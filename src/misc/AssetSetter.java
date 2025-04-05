@@ -121,13 +121,13 @@ public class AssetSetter {
 
 
         //MAP 2
-        gp.livingEntity[1][i] = new NPC_Amaryllis(gp);
-        gp.livingEntity[1][i].worldX = gp.livingEntity[1][i].spawnPointX = 19 * gp.tileSize;
-        gp.livingEntity[1][i].worldY = gp.livingEntity[1][i].spawnPointY = 47 * gp.tileSize;
-        gp.livingEntity[1][i].hasEvent = true;
-        gp.livingEntity[1][i].direction = "up";
-        gp.livingEntity[1][i].setLevel(10);
-        System.out.println(gp.livingEntity[1][i].getName() +" has event in Map " + gp.currentMap);
+//        gp.livingEntity[1][i] = new NPC_Amaryllis(gp);
+//        gp.livingEntity[1][i].worldX = gp.livingEntity[1][i].spawnPointX = 19 * gp.tileSize;
+//        gp.livingEntity[1][i].worldY = gp.livingEntity[1][i].spawnPointY = 47 * gp.tileSize;
+//        gp.livingEntity[1][i].hasEvent = true;
+//        gp.livingEntity[1][i].direction = "up";
+//        gp.livingEntity[1][i].setLevel(10);
+//        System.out.println(gp.livingEntity[1][i].getName() +" has event in Map " + gp.currentMap);
 
         //MAP 3
         gp.livingEntity[3][0] = new NPC_MamaPausy(gp);
@@ -199,11 +199,6 @@ public class AssetSetter {
 
 
         //MAP 5
-        i = 0;
-        gp.livingEntity[5][i] = new MOB_Swordsman(gp);
-        gp.livingEntity[5][i].worldX = gp.livingEntity[5][i].spawnPointX = 36 * gp.tileSize;
-        gp.livingEntity[5][i].worldY = gp.livingEntity[5][i].spawnPointY = 31 * gp.tileSize;
-        i++;
 
         //MAP 8
         i = 0;

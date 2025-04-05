@@ -17,6 +17,51 @@ public class Map extends TileManager{
         createWorldMap();
     }
 
+    public void addMapInfo(){
+        switch(gp.currentMap){
+            case 0:{
+                gp.ui.addDescription("<Forest Entrance>\n <Lvl 1-5>");
+                break;
+            }
+            case 1:{
+                gp.ui.addDescription("<Forest Path>\n <Lvl 1-5>");
+                break;
+            }
+            case 2:{
+                gp.ui.addDescription("<Cave Entrance>\n <Lvl 5-10>");
+                break;
+            }
+            case 3:{
+                gp.ui.addDescription("<Forest Uphill>\n <Lvl 10-15>");
+                break;
+            }
+            case 4:{
+                gp.ui.addDescription("<Cat Cave>\n <Safe Area>");
+                break;
+            }
+            case 5:{
+                gp.ui.addDescription("<Village Path>\n <Lvl 40-45>");
+                break;
+            }
+            case 6:{
+                gp.ui.addDescription("<Old Man's Forest>\n <Safe Area>");
+                break;
+            }
+            case 7:{
+                gp.ui.addDescription("<Old Man Lars' Hut>\n <Safe Area>");
+                break;
+            }
+            case 8:{
+                gp.ui.addDescription("<Veyra's Village>\n <Safe Area>");
+                break;
+            }
+            case 9:{
+                gp.ui.addDescription("<Veyra Hill>\n <Lvl 45-50>");
+                break;
+            }
+        }
+    }
+
     public void createWorldMap(){
         worldMap = new BufferedImage[gp.maxMap];
         int worldMapWidth = gp.tileSize * gp.maxWorldCol;
@@ -87,10 +132,10 @@ public class Map extends TileManager{
             int width = 200;
             int height = 200;
             int x = gp.screenWidth - width;
-            int y = 0;
+            int y = gp.tileSize+10;
 
             g2.getComposite();
-            g2.drawImage(worldMap[gp.currentMap], x, y, width, height, null);
+            g2.drawImage(worldMap[gp.currentMap], x-5, y, width, height, null);
 
             double scale = (double) (gp.tileSize * gp.maxWorldCol) / width;
             int playerX = (int) (x + gp.player.worldX / scale);

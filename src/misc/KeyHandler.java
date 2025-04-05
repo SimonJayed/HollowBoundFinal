@@ -168,12 +168,12 @@ public class KeyHandler implements KeyListener {
                                     gp.gameState = gp.playState;
                                 }
                                 else {
-                                    System.out.println("Escape Failed.");
+                                    gp.battleScreen.commandNum = 0;
+                                    gp.battleScreen.currentTurnFinished = true;
                                     gp.ui.addMessage("Escape Failed");
                                 }
                             }
                             else{
-                                System.out.println("Can't Escape.");
                                 gp.ui.addMessage("Can't Escape");
                             }
                             gp.battleScreen.isAttacking = false;
@@ -213,7 +213,7 @@ public class KeyHandler implements KeyListener {
                         gp.sound.setVolume(-20.0f);
                     }
                     if(code == KeyEvent.VK_ESCAPE){
-                        gp.battleScreen.isAttacking = false;
+                        gp.battleScreen.choosingSkill = false;
                     }
                 }
                 else if(gp.battleScreen.isAttacking && !gp.battleScreen.isEnemyTurn){
@@ -350,20 +350,17 @@ public class KeyHandler implements KeyListener {
                 }
 
                 if(code == KeyEvent.VK_Q){
-                    System.out.println("Q pressed");
                     gp.inventoryScreen.charNum--;
                     if(gp.inventoryScreen.charNum < 0){
                         gp.inventoryScreen.charNum = 2;
                     }
                 }
                 if(code == KeyEvent.VK_R){
-                    System.out.println("R pressed");
                     gp.inventoryScreen.charNum++;
                     if(gp.inventoryScreen.charNum > 2){
                         gp.inventoryScreen.charNum = 0;
                     }
                 }
-                System.out.println(gp.inventoryScreen.charNum);
             }
             else if (gp.gameState == gp.mapState) {
                 if (code == KeyEvent.VK_M || code == KeyEvent.VK_ESCAPE) {

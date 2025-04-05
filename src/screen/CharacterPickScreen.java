@@ -1,5 +1,7 @@
 package screen;
 
+import entity.Entity;
+import entity.NPC_Fort;
 import main.GamePanel;
 
 import javax.imageio.ImageIO;
@@ -103,10 +105,55 @@ public class CharacterPickScreen implements Screen{
     }
 
     public void showFortInfo(){
-        gp.ui.drawSubWindow(gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
+        int x = gp.tileSize/2;
+        int y = gp.tileSize*3;
+        gp.ui.drawSubWindow(x, y, gp.tileSize*9, gp.tileSize*9);
+
+        gp.ui.addDescription("Fort\n" +
+                "\n \nAn exiled villager now living as a wanderer, traveling from place to place.\n" +
+                "\n \nInit.HP: 100 Init.Energy: 50 ATK: 21 DEF: 24 SPD: \n" +
+                "\n \n  Main Stat: VIT \n" +
+                "VIT: 16 | STR: 7 | MAG: 5 | AGI: 6 | LUCK: 15\n" +
+                "\n \nSkills:\n" +
+                "Rage Bait \n" +
+                "Meat Shield \n" +
+                "SMAAAAASHHHHH\n");
+
+        gp.ui.drawDescription(x+10, y+25, 30);
     }
-    public void showAmaryllisInfo(){ gp.ui.drawSubWindow(gp.tileSize*8, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);}
+    public void showAmaryllisInfo(){
+        int x = gp.tileSize*8;
+        int y = gp.tileSize*3;
+        gp.ui.drawSubWindow(x, y, gp.tileSize*9, gp.tileSize*10);
+
+        gp.ui.addDescription("Amaryllis\n" +
+                "\n \nOnce an apprentice to the Eldren, she mastered nature’s alchemy. Now an outcast, she travels in search of answers.\n" +
+                "\n \nInit.HP: 75  Init.Energy: 100 ATK: 11 DEF: 3 SPD: 5\n" +
+                "\n \n  Main Stat: AGI, POW \n" +
+                "VIT: 6 | STR: 14 | MAG: 5 | AGI: 16 | LUCK: 9\n" +
+                "\n \nSkills:\n" +
+                "Binding Toxin\n" +
+                "Liquid Experiment\n" +
+                "Unleash\n");
+
+        gp.ui.drawDescription(x+10, y+25, 30);
+
+    }
     public void showSylvieInfo(){
-        gp.ui.drawSubWindow(gp.tileSize+gp.tileSize/2, gp.tileSize*3, gp.tileSize*9, gp.tileSize*10);
+        int x = gp.tileSize+gp.tileSize/2;
+        int y = gp.tileSize*3;
+        gp.ui.drawSubWindow(x, y, gp.tileSize*9, gp.tileSize*10+10);
+
+        gp.ui.addDescription("Sylvie\n" +
+                "\n \nA former princess of Eldenbloom, the once-flourishing kingdom now lost to the Hollow. She wields powerful magic, determined to reclaim what was taken.\n" +
+                "\n \nInit.HP: 100 Init.Energy: 50 ATK: 8 DEF: 4 SPD: 3\n" +
+                "\n \n  Main Stat: MAG \n" +
+                "VIT: 6 | STR: 6 | MAG: 23 | AGI: 6 | LUCK: 9\n" +
+                "\n \nSkills:\n" +
+                "Nature's Embrace\n" +
+                "Thorned Whip\n" +
+                "Bloom of Life\n");
+
+        gp.ui.drawDescription(x+10, y+25, 30);
     }
 }

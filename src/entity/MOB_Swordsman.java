@@ -17,11 +17,11 @@ public class MOB_Swordsman extends Entity {
         this.solidAreaDefaultY = this.solidArea.y;
         this.solidArea.width = 32;
         this.solidArea.height = 32;
-        sizeIncrement = 10;
+        sizeIncrement = 25;
 
         getImage("hollowedSwordsman");
-        setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
+        setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+2));
         setDialogue();
     }
 

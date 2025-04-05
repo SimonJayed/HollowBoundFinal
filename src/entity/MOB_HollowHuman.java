@@ -19,7 +19,7 @@ public class MOB_HollowHuman extends Entity {
 
         getImage("hollowedMob");
         setDefaultValues(1, 50, 50,2,5, 5, 5, 5, 0);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+2));
         setDialogue();
     }
 

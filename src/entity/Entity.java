@@ -140,8 +140,8 @@ public abstract class Entity {
         this.hp = maxHP;
         this.energy = maxEnergy;
 
-        this.attack = pow * 3;
-        this.defense = vit * 1.5;
+        this.attack = pow + 2;
+        this.defense = vit * 0.5;
         nextLevelExp = 10 * Math.pow(level, 2);
     }
     public void setStatIncrements(){
@@ -156,6 +156,8 @@ public abstract class Entity {
             level++;
             setStatIncrements();
             calculateStats();
+            this.hp = this.maxHP;
+            this.energy = this.maxEnergy;
             nextLevelExp = 10 * Math.pow(level, 2);
             gp.ui.addMessage(name + " has leveled up! (Lvl " + level + ")");
         }
@@ -228,8 +230,7 @@ public abstract class Entity {
         }
     }
 
-    public boolean useSkill(int skillIndex, Entity target){return false;}
-    public void updateSkillCooldowns(){}
+    public void useSkill(int skillIndex, Entity target){}
 
     public void update(){
         spriteAnim(2);

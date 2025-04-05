@@ -50,17 +50,18 @@ public class EventScenes implements Screen{
                 if(gp.currentMap == 1 && !event0Flag){
                     if(!entitySet){
                         //SET ENTITIES
-                        dialogues.clear();
-
+                        this.dialogues.clear();
 
                         //SET PLAYER
                         gp.player.isRunning = false;
 
                         //SET DIALOGUE
-                        gp.event.dialogues.add("Lol, Lmao, lmfao, rofl,, Trial Rani.");
-                        gp.event.dialogues.add("Hello, bum.");
-                        gp.event.dialogues.add("lolzies.");
-                        currentDialogue = dialogues.get(dialogueIndex);
+                        this.dialogues.add("Lol, Lmao, lmfao, rofl,, Trial Rani.");
+                        this.dialogues.add("Hello, bum.");
+                        this.dialogues.add("lolzies.");
+                        currentDialogue = this.dialogues.get(this.dialogueIndex);
+
+                        System.out.println("???");
 
                         entitySet = true;
                     }
@@ -74,7 +75,7 @@ public class EventScenes implements Screen{
                 if(gp.currentMap == 4 && !event1Flag){
                     if(!entitySet){
                         //SET ENTITIES
-                        dialogues.clear();
+                        this.dialogues.clear();
                         gp.livingEntity[4][5] = gp.companion2;
                         gp.livingEntity[4][5].setEvent("up", 26, 37, 2, 1, true);
                         gp.livingEntity[4][6].setEvent("left", 26, 33, 2, 1, true);
@@ -83,10 +84,10 @@ public class EventScenes implements Screen{
                         gp.player.isRunning = false;
 
                         //SET DIALOGUE
-                        gp.event.dialogues.add("KITTTYYUH!!!");
-                        gp.event.dialogues.add("Hello, bum.");
-                        gp.event.dialogues.add("Fat ass.");
-                        currentDialogue = dialogues.get(dialogueIndex);
+                        this.dialogues.add("KITTTYYUH!!!");
+                        this.dialogues.add("Hello, bum.");
+                        this.dialogues.add("Fat ass.");
+                        currentDialogue = this.dialogues.get(this.dialogueIndex);
 
                         entitySet = true;
                     }
@@ -139,6 +140,10 @@ public class EventScenes implements Screen{
             int sequenceLimit = dialogues.size();
             buffer++;
 
+            System.out.println("Event: " + eventNum);
+            System.out.println("Dialogue size: " + dialogues.size());
+            System.out.println("Buffer: " + buffer);
+
 
             if (sequenceCheck == 0) {
                 System.out.println("Sequence: " + sequenceCheck);
@@ -151,7 +156,7 @@ public class EventScenes implements Screen{
             }
 
             if (sequenceCheck == sequenceLimit) {
-                if(buffer > 50){
+                if(buffer > 100){
                     eventFinished = true;
                     event0Flag = true;
 

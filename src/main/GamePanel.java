@@ -147,6 +147,7 @@ public class GamePanel extends JPanel implements Runnable {
                         entityList.remove(entity);
                     }
                     if(gameState == eventState){
+                        System.out.println("Updating Event");
                         event.updateEvent();
                     }
                 }
@@ -216,13 +217,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             entityList.clear();
 
-            map.drawMiniMap(g2);
+
 
             if(gameState == eventState){
                 event.draw(g2);
             }
-
             ui.draw(g2);
+
+            map.drawMiniMap(g2);
 
             if (keyH.showDebugTest){
                 long drawEnd = System.nanoTime();

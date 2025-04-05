@@ -59,7 +59,9 @@ public class EventHandler{
                 teleport(gp.playState, 2, 45, "right");
                 if(!gp.event.event0Flag){
                     System.out.println("Event 0 played");
-                    gp.gameState = gp.eventState;
+                    gp.event.dialogueFinished = false;
+                    gp.event.dialogueOn = true;
+//                    gp.gameState = gp.eventState;
                     gp.ui.startFadeIn();
                     gp.event.playEvent0();
                 }
@@ -71,14 +73,11 @@ public class EventHandler{
             //GOING BACK TO MAP 0 (Intro Forest)
             if (hit(1,1, 44, "left") || hit(1,1, 45, "left") || hit(1,1, 46, "left") || hit(1,1, 47, "left")){
                 teleport(gp.playState, 47, 44, "left");
-                System.out.println(gp.player.isSafe);
             }
 
             //GOING TO MAP 2 (Cat Cave Entrance)
             if (hit(1,23, 44, "right")  || hit(1,23, 45, "right") || hit(1,23, 46, "right") || hit(1,23, 47, "right")){
                 teleport(gp.playState, 2, 35, "right");
-                gp.player.isSafe = true;
-                System.out.println(gp.player.isSafe);
             }
 
             //ENCOUNTERS
@@ -94,6 +93,7 @@ public class EventHandler{
             if (hit(2,21, 21, "up") || hit(2,22, 21, "up") || hit(2,22, 22, "up") || hit(2,23, 20, "up") || hit(2,24, 20, "up") || hit(2,25, 20, "up") || hit(2,26, 20, "up") || hit(2,27, 20, "up") || hit(2,28, 20, "up") || hit(2,29, 21, "up") || hit(2,30, 22, "up")){
                 teleport(gp.playState, 24, 37, "up");
                 gp.ui.addMessage("Went into Cat Cave");
+                gp.player.isSafe = true;
                 if(!gp.event.event1Flag && !gp.event.event2Flag){
                     gp.event.eventNum = 1;
                     gp.gameState = gp.eventState;
@@ -120,7 +120,6 @@ public class EventHandler{
             if (hit(3,48, 38, "right") || hit(3,48, 39, "right") || hit(3,48, 40, "right") || hit(3,48, 41, "right")){
                 teleport(gp.playState, 2, 19, "right");
                 gp.ui.addMessage("Went to Graveyard");
-                System.out.println(gp.player.isSafe);
             }
 
             //ENCOUNTERS
@@ -142,11 +141,10 @@ public class EventHandler{
                 teleport(gp.playState, 25, 20, "down");
             }
 
-            //GOING TO MAP 5
+            //GOING TO MAP 6
             if (hit(4,11, 13, "up")){
-//                teleport(gp.playState, 2, 41, "right");
+                teleport(gp.playState, 32, 47, "up");
                 gp.player.isSafe = true;
-                gp.ui.addMessage("Went to Old Man's Forest");
             }
 
             //ENCOUNTERS
@@ -161,7 +159,31 @@ public class EventHandler{
             //GOING TO MAP 8
             if (hit(5,31, 48, "down") || hit(5,32, 48, "down") || hit(5,33, 48, "down")){
                 teleport(gp.playState, 28, 3, "down");
-                gp.ui.addMessage("Went to Village");
+                gp.player.isSafe = true;
+            }
+
+            //ENCOUNTERS
+        }
+        //MAP 6 (Old Man's Forest) EVENTS
+        if (canTouchEvent && gp.currentMap == 6){
+            //GOING BACK TO MAP 4
+            if (hit(6,32, 48, "down")){
+                teleport(gp.playState, 11, 14, "down");
+                gp.player.isSafe = true;
+            }
+
+            //GOING TO MAP 7
+            if (hit(6,31, 48, "up") || hit(5,32, 48, "up") || hit(5,33, 48, "up")){
+//                teleport(gp.playState, 28, 3, "up");
+            }
+
+            //ENCOUNTERS
+        }
+        //MAP 7 (Old Man's Hut) EVENTS
+        if (canTouchEvent && gp.currentMap == 7){
+            //GOING BACK TO MAP 3
+            if (hit(5,1, 17, "left") || hit(5,1, 18, "left")  || hit(5,1, 19, "left") || hit(5,1, 20, "left")){
+                teleport(gp.playState, 47, 39, "left");
             }
 
             //ENCOUNTERS
@@ -174,8 +196,23 @@ public class EventHandler{
             }
 
             //GOING TO MAP 9
-            if (hit(8,11, 13, "down")){
-//                teleport(gp.playState, 2, 41, "right");
+            if (hit(8,48, 28, "right") || hit(8,48, 29, "right") || hit(8,48, 30, "right")){
+                teleport(gp.playState, 2, 43, "right");
+            }
+
+            //ENCOUNTERS
+        }
+        //MAP 9 (Veyra Hill) EVENTS
+        if (canTouchEvent && gp.currentMap == 9){
+            //GOING BACK TO MAP 8
+            if (hit(9,1, 42, "left") || hit(9,1, 43, "left") || hit(9,1, 44, "left")){
+                teleport(gp.playState, 47, 29, "left");
+                gp.player.isSafe = true;
+            }
+
+            //GOING TO MAP 10
+            if (hit(5,31, 48, "down") || hit(5,32, 48, "down") || hit(5,33, 48, "down")){
+                teleport(gp.playState, 28, 3, "down");
                 gp.ui.addMessage("Went to Village");
             }
 
@@ -251,7 +288,7 @@ public class EventHandler{
                 if(reqDirection.equals("down")){
                     gp.currentMap = 2;
                 }if(reqDirection.equals("up")){
-                    gp.currentMap = 5;
+                    gp.currentMap = 6;
                     System.out.println("Next Map");
                 }
                 break;
@@ -265,11 +302,35 @@ public class EventHandler{
                 }
                 break;
             }
+            case 6:{
+                if(reqDirection.equals("down")){
+                    gp.currentMap = 4;
+                }
+                break;
+            }
+//            case 7:{
+//                if(reqDirection.equals("left")){
+//                    gp.currentMap = 3;
+//                }if(reqDirection.equals("down")){
+//                    gp.currentMap = 8;
+//                    System.out.println("Next Map");
+//                }
+//                break;
+//            }
             case 8:{
                 if(reqDirection.equals("up")){
                     gp.currentMap = 5;
                 }if(reqDirection.equals("right")){
                     gp.currentMap = 9;
+                    System.out.println("Next Map");
+                }
+                break;
+            }
+            case 9:{
+                if(reqDirection.equals("left")){
+                    gp.currentMap = 8;
+                }if(reqDirection.equals("right")){
+                    gp.currentMap = 10;
                     System.out.println("Next Map");
                 }
                 break;
@@ -280,6 +341,8 @@ public class EventHandler{
         System.out.println("Map Changed");
         gp.player.isSafe = false;
         gp.player.encounterReset = true;
+        gp.player.stepLimit = 0;
+        gp.player.steps = 0;
         gp.ui.startFadeIn();
     }
 

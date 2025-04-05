@@ -21,8 +21,8 @@ public class UI {
     BufferedImage subWindow;
 
     public boolean messageOn = false;
-    ArrayList <String> message = new ArrayList<>();
-    ArrayList <Integer> messageCounter = new ArrayList<>();
+    public ArrayList <String> message = new ArrayList<>();
+    public ArrayList <Integer> messageCounter = new ArrayList<>();
 
     ArrayList <String> description = new ArrayList<>();
 
@@ -74,11 +74,14 @@ public class UI {
         }
         if (gp.gameState == gp.playState) {
             drawPlayerLife();
+            drawSubWindow(gp.screenWidth - 210, 0,  gp.tileSize*4+gp.tileSize/2-10, gp.tileSize*5+gp.tileSize/2);
             gp.map.miniMapOn = true;
+            gp.map.addMapInfo();
+            drawDescription(gp.screenWidth - 200, gp.tileSize/2,  11);
             playTime += (double) 1 / 60;
         }
         else if(gp.gameState == gp.inventoryState){
-            gp.map.miniMapOn = true;
+            gp.map.miniMapOn = false;
             drawPlayerLife();
             gp.inventoryScreen.loadImages();
             gp.inventoryScreen.draw(g2);
@@ -279,6 +282,12 @@ public class UI {
                     }
                 }
 
+//                if(gp.gameState == gp.playState){
+//                    description.remove(1);
+//                }
+//                else{
+//                    description.removeFirst();
+//                }
                 description.removeFirst();
             }
         }
@@ -368,7 +377,7 @@ public class UI {
     }
 
     public void drawSubWindow(int x, int y, int width, int height){
-        Color c = new Color(0, 0, 0, 150);
+        Color c = new Color(0, 0, 0, 180);
         g2.setColor(c);
         g2.fillRoundRect(x, y, width, height,20, 20);
 

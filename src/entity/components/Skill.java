@@ -1,6 +1,10 @@
 package entity.components;
 
+import java.text.DecimalFormat;
+
 public class Skill {
+    DecimalFormat df = new DecimalFormat("#.##");
+
     public String name;
     public String description;
     public double power;
@@ -14,15 +18,6 @@ public class Skill {
         this.power = power;
         this.energyCost = energyCost;
         this.cooldown = cooldown;
-        this.currentCooldown = 0;
-    }
-
-    public Skill(Skill skill) {
-        this.name = skill.name;
-        this.description = skill.description;
-        this.power = skill.power;
-        this.energyCost = skill.energyCost;
-        this.cooldown = skill.cooldown;
         this.currentCooldown = 0;
     }
 
@@ -40,6 +35,6 @@ public class Skill {
 
     @Override
     public String toString() {
-        return name + " (" + energyCost + " energy) - " + description;
+        return name + " (" + df.format(energyCost) + " energy)\n \n " + description + "\n \n Skill Power: " + power;
     }
 }
