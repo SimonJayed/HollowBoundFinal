@@ -20,16 +20,16 @@ public class MOB_Swordsman extends Entity {
         sizeIncrement = 10;
 
         getImage("hollowedSwordsman");
-        setDefaultValues(1, 150, 250,5,5, 15, 1, 15, 9);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+6));
+        setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
         setDialogue();
     }
 
     public void setStatIncrements(){
-        this.vit += 2;
-        this.pow += 8;
-        this.mag += 1;
-        this.agi += 5;
+        this.vit += 1;
+        this.pow += 1;
+        this.mag += 2;
+        this.agi += 3;
     }
 
     public void checkDefeated(){

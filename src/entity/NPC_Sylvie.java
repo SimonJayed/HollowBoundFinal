@@ -19,7 +19,7 @@ public class NPC_Sylvie extends Entity {
         this.solidArea.height = 32;
 
         getImage("sylvie");
-        setDefaultValues(1, 100, 400,3, 7, 5, 19, 5,  9);
+        setDefaultValues(1, 100, 250,3, 7, 5, 19, 5,  9);
 
         skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, maxEnergy*0.2, 2));
         skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy", 25, maxEnergy*0.4, 1));

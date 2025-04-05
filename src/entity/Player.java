@@ -83,7 +83,7 @@ public class Player extends Entity{
             case "fort":{
                 setName("Fort");
                 getImage("fort");
-                setDefaultValues(1, 400, 100,4, 15, 6, 4, 5,  15);
+                setDefaultValues(1, 150, 100,4, 15, 6, 4, 5,  15);
                 getCombatImages("fort");
                 skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
                 skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
@@ -93,13 +93,13 @@ public class Player extends Entity{
             case "amaryllis":{
                 setName("Amaryllis");
                 getImage("amaryllis");
-                setDefaultValues(1, 250, 250,5,5, 8, 10, 13, 9);
+                setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
                 break;
             }
             case "sylvie":{
                 setName("Sylvie");
                 getImage("sylvie");
-                setDefaultValues(1, 100, 400,3, 7, 5, 19, 5,  9);
+                setDefaultValues(1, 100, 250,3, 7, 5, 19, 5,  9);
                 break;
             }
         }
@@ -275,10 +275,10 @@ public class Player extends Entity{
 
         if(stepLimit == 0){
             if(gp.currentMap != 5){
-                stepLimit = gp.randomize(200, 500);
+                stepLimit = gp.randomize(200, 800);
             }
             else{
-                stepLimit = gp.randomize(100, 200);
+                stepLimit = gp.randomize(100, 300);
             }
         }
 

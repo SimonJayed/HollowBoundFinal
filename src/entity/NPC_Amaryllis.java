@@ -18,7 +18,7 @@ public class NPC_Amaryllis extends Entity {
         this.solidArea.height = 32;
 
         getImage("amaryllis");
-        setDefaultValues(1, 250, 250,5,5, 8, 10, 13, 9);
+        setDefaultValues(1, 100, 100,5,5, 8, 10, 13, 9);
         setDialogue();
 
         skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));

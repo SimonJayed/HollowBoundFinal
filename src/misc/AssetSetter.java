@@ -110,55 +110,7 @@ public class AssetSetter {
 
         //MAP 8
         i = 0;
-        gp.objectEntity[8][i] = new OBJ_House1(gp);
-        gp.objectEntity[8][i].worldX = 8 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 11 * gp.tileSize;
-        i++;
-        gp.objectEntity[8][i] = new OBJ_House2(gp);
-        gp.objectEntity[8][i].worldX = 34 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 8 * gp.tileSize;
-        i++;
-        gp.objectEntity[8][i] = new OBJ_House3(gp);
-        gp.objectEntity[8][i].worldX = 41 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 9 * gp.tileSize;
-        i++;
-        gp.objectEntity[8][i] = new OBJ_House3(gp);
-        gp.objectEntity[8][i].worldX = 3 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 31 * gp.tileSize;
-        i++;
-        gp.objectEntity[8][i] = new OBJ_House2(gp);
-        gp.objectEntity[8][i].worldX = 10 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 35 * gp.tileSize;
-        i++;
-        gp.objectEntity[8][i] = new OBJ_House1(gp);
-        gp.objectEntity[8][i].worldX = 26 * gp.tileSize;
-        gp.objectEntity[8][i].worldY = 35 * gp.tileSize;
-        i++;
 
-        gp.foreground[8][i] = new FG_Tree2(gp);
-        gp.foreground[8][i].worldX = 46 * gp.tileSize;
-        gp.foreground[8][i].worldY = 16 * gp.tileSize;
-        i++;
-        gp.foreground[8][i] = new FG_Tree1(gp);
-        gp.foreground[8][i].worldX = 37 * gp.tileSize;
-        gp.foreground[8][i].worldY = 15 * gp.tileSize;
-        i++;
-        gp.foreground[8][i] = new FG_Tree1(gp);
-        gp.foreground[8][i].worldX = 7 * gp.tileSize;
-        gp.foreground[8][i].worldY = 17 * gp.tileSize;
-        i++;
-        gp.foreground[8][i] = new FG_Tree1(gp);
-        gp.foreground[8][i].worldX = 0 * gp.tileSize;
-        gp.foreground[8][i].worldY = 12 * gp.tileSize;
-        i++;
-        gp.foreground[8][i] = new FG_Tree1(gp);
-        gp.foreground[8][i].worldX = 0 * gp.tileSize;
-        gp.foreground[8][i].worldY = 38 * gp.tileSize;
-        i++;
-        gp.foreground[8][i] = new FG_Tree1(gp);
-        gp.foreground[8][i].worldX = 4 * gp.tileSize;
-        gp.foreground[8][i].worldY = 44 * gp.tileSize;
-        i++;
 
     }
 

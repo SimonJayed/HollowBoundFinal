@@ -19,14 +19,14 @@ public class MOB_Beast extends Entity {
         sizeIncrement = 80;
 
         getImage("hollowedBeast");
-        setDefaultValues(1, 250, 250,2,10, 13, 10, 13, 0);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+8));
+        setDefaultValues(1, 150, 50,2,10, 13, 10, 13, 0);
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
         setDialogue();
     }
 
     public void setStatIncrements(){
-        this.vit += 8;
-        this.pow += 5;
+        this.vit += 4;
+        this.pow += 3;
         this.mag += 1;
         this.agi += 1;
     }

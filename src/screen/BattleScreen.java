@@ -126,6 +126,7 @@ public class BattleScreen implements Screen{
             return;
         }
         battleQueue.sort(Comparator.comparingInt(e -> (int) -e.agi));
+
         buffer++;
         if(currentTurnFinished){
             currentTurn = (currentTurn + 1) % battleQueue.size();
@@ -526,7 +527,7 @@ public class BattleScreen implements Screen{
     }
 
     public void endBattle(){
-        double expGain = currentEnemy.nextLevelExp/3;
+        double expGain = currentEnemy.nextLevelExp/2;
 
         for(Entity member : battleQueue){
             if(member != currentEnemy){

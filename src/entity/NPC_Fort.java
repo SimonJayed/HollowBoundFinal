@@ -21,13 +21,11 @@ public class NPC_Fort extends Entity {
         this.solidArea.height = 32;
 
         getImage("fort");
-        setDefaultValues(1, 400, 100,4, 15, 6, 4, 5,  15);
+        setDefaultValues(1, 150, 100,4, 15, 6, 4, 5,  15);
 
         skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
         skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
         skills.add(new Skill("SMAAAAASHHHHH", "Deals damage to the enemy equivalent to health lost and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), maxEnergy*0.8, 2));
-
-
     }
 
     public void setStatIncrements(){

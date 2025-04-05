@@ -128,6 +128,7 @@ public abstract class Entity {
             setStatIncrements();
             tempLevel--;
         }
+        calculateStats();
     }
     public void setDialogue(){
 
