@@ -1,13 +1,12 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 public class NPC_Amaryllis extends Entity {
 
     public NPC_Amaryllis(GamePanel gp) {
         super(gp);
-
-        type = 2;
 
         setName("Amaryllis");
 
@@ -21,6 +20,10 @@ public class NPC_Amaryllis extends Entity {
         getImage("amaryllis");
         setDefaultValues(1, 250, 250,5,5, 8, 10, 13, 9);
         setDialogue();
+
+        skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));
+        skills.add(new Skill("Liquid Experiment", "Gives a random buff to an ally.", 25, maxEnergy*0.3, 2));
+        skills.add(new Skill("Unleash", "Transforms into her beast form and gives a boost to her stats for 3 turns", 135.6, maxEnergy*0.8, 5));
     }
 
     public void setStatIncrements(){
@@ -30,15 +33,30 @@ public class NPC_Amaryllis extends Entity {
         this.agi += 3;
     }
 
-//    public void checkLevelUp(){
-//        while (exp >= nextLevelExp) {
-//            level++;
-//            setStatIncrements();
-//            calculateStats();
-//            nextLevelExp += nextLevelExp + (level * 2);
-//            gp.ui.addMessage(getName() + " has leveled up! (Lvl " + level + ")");
-//        }
-//    }
+    public void useSkill1(Entity entity){
+
+
+        gp.ui.addMessage(getName() + "");
+        skills.get(0).use();
+    }
+
+    public void useSkill2(Entity entity){
+        skills.get(1).use();
+    }
+
+    public void useSkill3(Entity entity){
+        skills.get(2).use();
+    }
+
+    public void calculateStats(){
+        this.maxHP = initialHP + (15 * level) + (vit * 2);
+        this.maxEnergy = initialEnergy + (15 * level) + (mag * 2);
+        this.energyRegen = maxEnergy * 0.1 + (mag / 100);
+
+        this.attack = pow * 3;
+        this.defense = vit * 1.5;
+        nextLevelExp = 10 * Math.pow(level, 2);
+    }
 
     public void setAction() {
         actionLockCounter++;
@@ -64,15 +82,6 @@ public class NPC_Amaryllis extends Entity {
             actionLockCounter = 0;
         }
         spriteAnim(2);
-    }
-
-    public void setDialogue() {
-//        if (gp.event.eventNum == 0) {
-//            System.out.println(getName() + " Dialogues added.");
-//            System.out.println("LOLDialogue size: " + gp.event.dialogues.size());
-//            gp.event.dialogues.add("Lol, Lmao, lmfao, rofl,, Trial Rani.");
-////            gp.event.dialogues.add("Hello, bum.");
-//        }
     }
 
     public void speak(){

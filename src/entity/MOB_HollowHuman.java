@@ -18,13 +18,14 @@ public class MOB_HollowHuman extends Entity {
         this.solidArea.height = 32;
 
         getImage("hollowedMob");
-        setDefaultValues(1, 250, 250,2,5, 5, 5, 5, 0);
+        setDefaultValues(1, 100, 250,2,10, 15, 10, 10, 0);
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
         setDialogue();
     }
 
     public void setStatIncrements(){
         this.vit += 2;
-        this.pow += 2;
+        this.pow += 4;
         this.mag += 2;
         this.agi += 2;
     }

@@ -35,12 +35,15 @@ public class TileManager {
     }
 
     public void getTileImage() {
-        setup(0, "grass1", false);
-        setup(1, "tree", true);
+        setup(0, "grass", false);
+        setup(1, "treeThick", true);
         setup(2, "waterWow", false);
         setup(3, "waterWow", true);
+        setup(4, "grassBald", false);
+        setup(6, "bush", true);
 
-        setup(10, "blk", false);
+        setup(9, "blk", false);
+        setup(10, "treeLeaves", true);
         setup(11, "grassPlain", true);
 
 

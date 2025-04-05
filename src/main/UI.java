@@ -24,6 +24,8 @@ public class UI {
     ArrayList <String> message = new ArrayList<>();
     ArrayList <Integer> messageCounter = new ArrayList<>();
 
+    ArrayList <String> description = new ArrayList<>();
+
     public boolean gameFinished = false;
 
     public String currentDialogue = "";
@@ -56,6 +58,9 @@ public class UI {
     public void addMessage(String text){
         message.add(text);
         messageCounter.add(0);
+    }
+    public void addDescription(String text){
+        description.add(text);
     }
 
     public void draw(Graphics2D g2) {
@@ -181,31 +186,52 @@ public class UI {
 
         text = gp.df.format(gp.player.exp) + "/" + gp.df.format(gp.player.nextLevelExp);
         String text2 = " (" + gp.df.format(gp.player.exp/gp.player.nextLevelExp*100) + "%)";
-        x = getXforCenteredText(g2, text);
+        x = getXforCenteredText(text);
         g2.setFont(g2.getFont().deriveFont( 14f));
         g2.setColor(new Color(0, 0, 0));
         g2.drawString(text + text2, x, y+15);
     }
 
-    public void drawMessage(int x, int y){
+    public void drawMessage(int x, int y, int frameCharLimit){
         int messageX = x;
         int messageY = y;
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20f));
 
         for (int i = 0; i < message.size(); i++){
 
             if (message.get(i) != null){
 
                 g2.setColor(new Color(255, 255, 255));
-                g2.drawString(message.get(i), messageX, messageY);
+
+                String[] paragraphs = message.get(i).split("\n");
+
+                for (String paragraph : paragraphs) {
+                    int start = 0;
+                    while (start < paragraph.length()) {
+                        int end = Math.min(start + frameCharLimit, paragraph.length());
+
+                        if (end < paragraph.length() && paragraph.charAt(end) != ' ') {
+                            int lastSpace = paragraph.lastIndexOf(' ', end);
+                            if (lastSpace > start) {
+                                end = lastSpace + 1;
+                            }
+                        }
+
+                        String line = paragraph.substring(start, end).trim();
+                        g2.drawString(line, messageX, messageY);
+                        messageY += gp.tileSize/2;
+
+                        start = end;
+                    }
+                }
 
                 int counter = messageCounter.get(i) + 1;
                 messageCounter.set(i, counter);
                 messageY += 25;
 
                 if(gp.gameState == gp.battleState){
-                    if (messageCounter.get(i) > 250 || i > 3){
+                    if (i >= 1){
                         message.removeFirst();
                         messageCounter.removeFirst();
                     }
@@ -216,6 +242,44 @@ public class UI {
                         messageCounter.remove(i);
                     }
                 }
+            }
+        }
+    }
+    public void drawDescription(int x, int y, int frameCharLimit){
+        int messageX = x;
+        int messageY = y;
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20f));
+
+        for (int i = 0; i < description.size(); i++){
+
+            if (description.get(i) != null){
+
+                g2.setColor(new Color(255, 255, 255));
+
+                String[] paragraphs = description.get(i).split("\n");
+
+                for (String paragraph : paragraphs) {
+                    int start = 0;
+                    while (start < paragraph.length()) {
+                        int end = Math.min(start + frameCharLimit, paragraph.length());
+
+                        if (end < paragraph.length() && paragraph.charAt(end) != ' ') {
+                            int lastSpace = paragraph.lastIndexOf(' ', end);
+                            if (lastSpace > start) {
+                                end = lastSpace + 1;
+                            }
+                        }
+
+                        String line = paragraph.substring(start, end).trim();
+                        g2.drawString(line, messageX, messageY);
+                        messageY += gp.tileSize/2;
+
+                        start = end;
+                    }
+                }
+
+                description.removeFirst();
             }
         }
     }
@@ -275,21 +339,19 @@ public class UI {
         if (!fading) return;
 
         if (fadeOut) {
-            if(gp.gameState != gp.playState){
-                fadeAlpha += 85;
-            }else{
-                fadeAlpha += 50;
-            }
+            fadeAlpha += 50;
             if (fadeAlpha >= 255) {
                 fadeAlpha = 255;
                 fading = false;
             }
         } else if (fadeIn) {
-            if(gp.gameState != gp.playState && gp.gameState != gp.eventState){
+            if(gp.gameState == gp.eventState || gp.gameState == gp.characterPickState){
                 fadeAlpha -= 85;
-            }else {
+            }
+            else{
                 fadeAlpha -= 10;
             }
+
             if (fadeAlpha <= 0) {
                 fadeAlpha = 0;
                 fading = false;
@@ -300,7 +362,7 @@ public class UI {
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
     }
 
-    public int getXforCenteredText(Graphics2D g2, String text){
+    public int getXforCenteredText(String text){
         int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return gp.screenWidth/2 - length/2;
     }

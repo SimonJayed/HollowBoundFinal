@@ -227,6 +227,9 @@ public abstract class Entity {
         }
     }
 
+    public boolean useSkill(int skillIndex, Entity target){return false;}
+    public void updateSkillCooldowns(){}
+
     public void update(){
         spriteAnim(2);
         if(!hasEvent && !isDefeated){
@@ -295,7 +298,7 @@ public abstract class Entity {
                 energy = maxEnergy;
                 exp = nextLevelExp;
                 int num = 0;
-                while(num < hollowCounter){
+                while(num < gp.randomize(hollowCounter, hollowCounter+2)){
                     setStatIncrements();
                     calculateStats();
                     num++;
@@ -456,7 +459,7 @@ public abstract class Entity {
                 }
             }
         }
-        displayEntityStats(g2);
+//        displayEntityStats(g2);
 
         if (invincible){
             hpBarOn = true;

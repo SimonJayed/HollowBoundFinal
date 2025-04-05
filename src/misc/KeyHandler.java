@@ -32,14 +32,14 @@ public class KeyHandler implements KeyListener {
                 if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                     gp.titleScreen.commandNum--;
                     if (gp.titleScreen.commandNum < 0) {
-                        gp.titleScreen.commandNum = 3;
+                        gp.titleScreen.commandNum = 2;
                     }
                     gp.playSoundEffect(3);
                     gp.sound.setVolume(-20.0f);
                 }
                 if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                     gp.titleScreen.commandNum++;
-                    if (gp.titleScreen.commandNum > 3) {
+                    if (gp.titleScreen.commandNum > 2) {
                         gp.titleScreen.commandNum = 0;
                     }
                     gp.playSoundEffect(3);
@@ -136,7 +136,7 @@ public class KeyHandler implements KeyListener {
             }
             //BATTLESTATE
             else if (gp.gameState == gp.battleState) {
-                if(!gp.battleScreen.isAttacking && !gp.battleScreen.isEnemyTurn){
+                if(!gp.battleScreen.isAttacking && !gp.battleScreen.isEnemyTurn && gp.battleScreen.buffer>15){
                     if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                         gp.battleScreen.commandNum--;
                         if (gp.battleScreen.commandNum < 0) {
@@ -156,6 +156,9 @@ public class KeyHandler implements KeyListener {
                     if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                         if (gp.battleScreen.commandNum == 0) {
                             gp.battleScreen.attack();
+                        }
+                        if (gp.battleScreen.commandNum == 1) {
+                            gp.battleScreen.skill();
                         }
                         if (gp.battleScreen.commandNum == 3) {
                             if(gp.battleScreen.canEscape){
@@ -177,6 +180,40 @@ public class KeyHandler implements KeyListener {
                         }
                         gp.playSoundEffect(3);
                         gp.sound.setVolume(-20.0f);
+                    }
+                }
+                else if(gp.battleScreen.choosingSkill && !gp.battleScreen.isAttacking && !gp.battleScreen.isEnemyTurn){
+                    if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                        gp.battleScreen.commandNum--;
+                        if (gp.battleScreen.commandNum < 0) {
+                            gp.battleScreen.commandNum = 2;
+                        }
+                        gp.playSoundEffect(3);
+                        gp.sound.setVolume(-20.0f);
+                    }
+                    if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                        gp.battleScreen.commandNum++;
+                        if (gp.battleScreen.commandNum > 2) {
+                            gp.battleScreen.commandNum = 0;
+                        }
+                        gp.playSoundEffect(3);
+                        gp.sound.setVolume(-20.0f);
+                    }
+                    if(code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE){
+                        if(gp.battleScreen.commandNum == 0){
+                            gp.battleScreen.playerAttack("HEAD");
+                        }
+                        if(gp.battleScreen.commandNum == 1){
+                            gp.battleScreen.playerAttack("TORSO");
+                        }
+                        if(gp.battleScreen.commandNum == 2){
+                            gp.battleScreen.playerAttack("LEGS");
+                        }
+                        gp.playSoundEffect(3);
+                        gp.sound.setVolume(-20.0f);
+                    }
+                    if(code == KeyEvent.VK_ESCAPE){
+                        gp.battleScreen.isAttacking = false;
                     }
                 }
                 else if(gp.battleScreen.isAttacking && !gp.battleScreen.isEnemyTurn){

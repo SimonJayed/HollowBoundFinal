@@ -20,6 +20,7 @@ public class BattleScreen implements Screen{
     BufferedImage actionWindow1 = null;
     BufferedImage heart = null;
     BufferedImage energy = null;
+    BufferedImage transition = null;
 
     public ArrayList<Entity> battleQueue = new ArrayList<>();
     public Entity currentEnemy;
@@ -31,6 +32,7 @@ public class BattleScreen implements Screen{
     public int damageBuffer = 0;
 
     public boolean isAttacking = false;
+    public boolean choosingSkill = false;
     public boolean canEscape = true;
     private boolean battleActive = false;
     public boolean currentTurnFinished = false;
@@ -49,6 +51,8 @@ public class BattleScreen implements Screen{
             else{
                 background = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/background/battle/corruptedForest.png")));
             }
+            transition = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/background/battle/FIGHT.png")));
+            transition = uTool.scaleImage(transition, gp.screenWidth, gp.screenHeight);
             actionWindow = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/actionWindow2.png")));
             actionWindow = uTool.scaleImage(actionWindow, gp.screenWidth, gp.screenHeight);
             actionWindow1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/actionWindow1.png")));
@@ -68,11 +72,14 @@ public class BattleScreen implements Screen{
         actionWindow1 = null;
         heart = null;
         energy = null;
+        transition = null;
     }
 
     public void startBattle(Entity enemy) {
+        gp.ui.startFadeIn();
         gp.gameState = gp.battleState;
         currentTurn = 0;
+        commandNum = 0;
         loadImages();
         currentEnemy = enemy;
         battleQueue.clear();
@@ -89,25 +96,28 @@ public class BattleScreen implements Screen{
     @Override
     public void draw(Graphics2D g2){
         this.g2 = g2;
+        if(gp.ui.fading){
+            g2.drawImage(transition, 0, 0, null);
+            return;
+        }
         g2.setColor(Color.white);
         g2.drawImage(background, 0, 0, gp.screenWidth, gp.screenHeight, null);
-
-        gp.ui.drawSubWindow(gp.tileSize*6, 0, gp.tileSize*12, gp.tileSize*3);
-        gp.ui.drawSubWindow(gp.tileSize*6, gp.screenHeight-gp.tileSize*4, gp.tileSize*12, gp.tileSize*4);
-        gp.ui.drawSubWindow(gp.tileSize-3, gp.tileSize/2-10, gp.tileSize*battleQueue.size()+3, gp.tileSize*2+15);
-
-
-        update();
-        gp.ui.drawMessage(gp.tileSize*6 + 10, gp.tileSize/2);
 
         drawEnemy(g2);
 
         drawPartyMembers(g2);
 
-        drawMenu(g2);
+        gp.ui.drawSubWindow(gp.tileSize*6, 0, gp.tileSize*12, gp.tileSize*3);
+        gp.ui.drawSubWindow(gp.tileSize*6, gp.screenHeight-gp.tileSize*4, gp.tileSize*12, gp.tileSize*4);
+        gp.ui.drawSubWindow(gp.tileSize-3, gp.tileSize/2-10, gp.tileSize*battleQueue.size()+3, gp.tileSize*2+15);
+
+        update();
+        gp.ui.drawMessage(gp.tileSize*6 + 10, gp.tileSize/2 + 10, 35);
+        gp.ui.drawDescription(gp.tileSize*6 + 10, gp.screenHeight-gp.tileSize*3-gp.tileSize/2, 35);
+
+
 
         drawTurnQueue(g2);
-
 
     }
 
@@ -115,15 +125,22 @@ public class BattleScreen implements Screen{
         if (!battleActive) {
             return;
         }
+        battleQueue.sort(Comparator.comparingInt(e -> (int) -e.agi));
+        buffer++;
+        if(currentTurnFinished){
+            currentTurn = (currentTurn + 1) % battleQueue.size();
+            currentTurnFinished = false;
+            buffer = 0;
+        }
 
         Entity currentEntity = battleQueue.get(currentTurn);
 
         if(currentEntity.hp <= 0){
             currentTurnFinished = true;
+            return;
         }
 
         if (currentEntity == currentEnemy && !currentTurnFinished) {
-            buffer++;
             isEnemyTurn = true;
             System.out.println("Enemy Choosing. ");
             if (buffer > 50) {
@@ -131,24 +148,9 @@ public class BattleScreen implements Screen{
                 isEnemyTurn = false;
                 currentTurnFinished = true;
                 System.out.println("Enemy Turn Finished. ");
-                buffer = 0;
             }
         }
-        if(currentTurnFinished){
-            currentTurn = (currentTurn + 1) % battleQueue.size();
-            currentTurnFinished = false;
-        }
 
-    }
-
-
-
-    public void drawMenu(Graphics2D g2){
-
-        int x = gp.tileSize/2;
-        int y = 0;
-
-        x += gp.tileSize*8;
 
     }
 
@@ -157,7 +159,12 @@ public class BattleScreen implements Screen{
         commandNum = 0;
     }
 
-    private void drawPartyMembers(Graphics2D g2) {
+    public void skill(){
+        choosingSkill = true;
+        commandNum = 0;
+    }
+
+    public void drawPartyMembers(Graphics2D g2) {
         int baseX = gp.tileSize * 2 + gp.tileSize;
         int baseY = gp.screenHeight / 2 - gp.tileSize;
         int spacing = gp.tileSize * 4;
@@ -173,7 +180,7 @@ public class BattleScreen implements Screen{
                 }
                 else if (entity == gp.companion2){
                     x = baseX;
-                    y = baseY + (spacing);
+                    y = baseY + (spacing-gp.tileSize);
                 }
                 else{
                     x = baseX;
@@ -185,7 +192,7 @@ public class BattleScreen implements Screen{
                     sprite = entity.defeated1;
                 }
 
-                g2.drawImage(sprite, x, y, gp.tileSize, gp.tileSize, null);
+                g2.drawImage(sprite, x, y, gp.tileSize+gp.tileSize/2, gp.tileSize+gp.tileSize/2, null);
 
                 g2.setColor(Color.WHITE);
                 g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
@@ -224,31 +231,71 @@ public class BattleScreen implements Screen{
                 g2.drawString(text, x + gp.tileSize+2, y-5);
 
                 if (i == currentTurn) {
-                    if(!isAttacking) {
+                    if(!isAttacking && !choosingSkill) {
                         int tempX = x - (gp.tileSize*2+gp.tileSize/2)+5;
                         int tempY = y + 15;
                         drawOption("ATTACK", tempX, tempY, 0);
+                        if(commandNum == 0){
+                            gp.ui.addDescription("Use Basic Attack\n \n Attack enemy with a basic attack.");
+                        }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("SKILL", tempX, tempY, 1);
+                        if(commandNum == 1){
+                            gp.ui.addDescription("Use Skills\n \n Use skills. Will consume energy.");
+                        }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("ITEM", tempX, tempY, 2);
+                        if(commandNum == 2){
+                            gp.ui.addDescription("Use Items\n \n Use items available in your inventory.");
+                        }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("FLEE", tempX, tempY, 3);
+                        if(commandNum == 3){
+                            gp.ui.addDescription("Run Away\n \n Attempt to escape from the battle.");
+                        }
                     }
-                    if(isAttacking){
+                    else if(choosingSkill){
+                        int tempX = x - (gp.tileSize*2+gp.tileSize/2)+5;
+                        int tempY = y + 10;
+                        drawOption("Skill 1", tempX, tempY, 0);
+                        if(commandNum == 0){
+                            gp.ui.addDescription(entity.skills.get(0).name + "\n \n" + entity.skills.get(0).description + "\n Skill Power: " + gp.df.format(entity.skills.get(0).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(0).energyCost));
+                        }
+                        tempX += 3;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("Skill 2", tempX, tempY, 1);
+                        if(commandNum == 1){
+                            gp.ui.addDescription(entity.skills.get(1).name + "\n \n" + entity.skills.get(1).description + "\n Skill Power: " + gp.df.format(entity.skills.get(1).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(1).energyCost));
+                        }
+                        tempX += 3;
+                        tempY += gp.tileSize/2;
+
+                        drawOption("Ultimate", tempX, tempY, 2);
+                        if(commandNum == 2){
+                            gp.ui.addDescription(entity.skills.get(2).name + "\n \n" + entity.skills.get(2).description + "\n Skill Power: " + gp.df.format(entity.skills.get(2).power+entity.skills.get(0).energyCost) + "\n Energy Cost: " + gp.df.format(entity.skills.get(2).energyCost));
+                        }
+                    }
+                    else if(isAttacking){
                         int tempX = x - (gp.tileSize*2+gp.tileSize/2)+5;
                         int tempY = y + 10;
                         drawOption("HEAD", tempX, tempY, 0);
+                        if(commandNum == 0){
+                            gp.ui.addDescription("Attack Head\n \n Low hit chance (40% + Luck Factor)\n Deals 2-3 times damage if successful.");
+                        }
                         tempX += 3;
                         tempY += gp.tileSize/2;
 
                         drawOption("TORSO", tempX, tempY, 1);
+                        if(commandNum == 1) {
+                            gp.ui.addDescription("Attack Torso\n \n High hit chance\n Deals normal damage.");
+                        }
                     }
                 }
                 if(entity.isAttacked){
@@ -257,7 +304,6 @@ public class BattleScreen implements Screen{
             }
         }
     }
-
     public void drawTurnQueue(Graphics2D g2) {
         int baseX = gp.tileSize;
         int baseY = gp.tileSize;
@@ -290,7 +336,6 @@ public class BattleScreen implements Screen{
             x += spacing;
         }
     }
-
     public void drawEnemy(Graphics2D g2){
         for (int i = 0; i < battleQueue.size(); i++) {
             Entity entity = battleQueue.get(i);
@@ -299,7 +344,7 @@ public class BattleScreen implements Screen{
                 int y = gp.screenHeight / 2;
                 BufferedImage sprite = currentEnemy.left1;
 
-                g2.drawImage(sprite, x, y-currentEnemy.sizeIncrement, gp.tileSize+currentEnemy.sizeIncrement, gp.tileSize+currentEnemy.sizeIncrement, null);
+                g2.drawImage(sprite, x, y-currentEnemy.sizeIncrement, gp.tileSize+currentEnemy.sizeIncrement+gp.tileSize/2, gp.tileSize+currentEnemy.sizeIncrement+gp.tileSize/2, null);
 
                 g2.setColor(Color.WHITE);
                 g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
@@ -343,11 +388,9 @@ public class BattleScreen implements Screen{
             }
         }
     }
-
     public void damaged(Graphics2D g2, Entity entity, int x, int y) {
         showDamage(g2, entity, x, y, damage, entity.isHealed);
     }
-
     public void showDamage(Graphics2D g2, Entity entity, int x, int y, double amount, boolean isHealing) {
         if (entity.isAttacked || entity.isHealed) {
             y++;
@@ -388,6 +431,8 @@ public class BattleScreen implements Screen{
         int hitRoll = gp.randomize(1, 100);
         double luckFactor = attacker.luck * 0.01 - (defender.luck * 0.01);
 
+        double damage = 0;
+
         int hitChance = 0;
         double damageMultiplier = 1.0;
 
@@ -405,7 +450,7 @@ public class BattleScreen implements Screen{
         hitChance = Math.max(hitChance, 5);
 
         if (hitRoll <= hitChance) {
-            double damage = (attacker.attack - defender.defense) * damageMultiplier;
+            damage = (attacker.attack - defender.defense) * damageMultiplier;
             damage = Math.max(damage, 1);
             return damage;
         } else {
@@ -443,7 +488,7 @@ public class BattleScreen implements Screen{
     public void enemyAttack(Entity target) {
         if (currentEnemy == null) return;
 
-        String targetArea = (gp.randomize(0, 1) == 0) ? "HEAD" : "TORSO";
+        String targetArea = (gp.randomize(0, 10) >= 8) ? "HEAD" : "TORSO";
 
         damage = calculateDamage(currentEnemy, target, targetArea);
 
@@ -488,7 +533,8 @@ public class BattleScreen implements Screen{
                 member.exp += expGain;
                 member.hp += 5;
                 member.regen();
-                member.checkLevelUp();
+                member.update();
+                System.out.println(member.getName() + " updated.");
             }
         }
         currentEnemy.isDefeated = true;

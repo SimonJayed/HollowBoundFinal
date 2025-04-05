@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 public class NPC_Sylvie extends Entity {
@@ -19,7 +20,11 @@ public class NPC_Sylvie extends Entity {
 
         getImage("sylvie");
         setDefaultValues(1, 100, 400,3, 7, 5, 19, 5,  9);
-//        setDialogue();
+
+        skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, maxEnergy*0.2, 2));
+        skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy", 25, maxEnergy*0.4, 1));
+        skills.add(new Skill("Bloom of Life", "Creates an explosion of natural energy that damages enemies and heals allies", 135.6, maxEnergy*0.8, 2));
+
     }
 
     public void setStatIncrements(){
@@ -27,6 +32,31 @@ public class NPC_Sylvie extends Entity {
         this.pow += 1;
         this.mag += 4;
         this.agi += 1;
+    }
+
+    public void useSkill1(Entity target){
+        skills.get(0).power += skills.get(0).energyCost;
+        target.hp += skills.get(0).power;
+        gp.ui.addMessage(getName() + " heals " + target.getName() + " for " + skills.get(0).power + ".");
+        skills.get(0).use();
+    }
+
+    public void useSkill2(Entity entity){
+        skills.get(1).use();
+    }
+
+    public void useSkill3(Entity entity){
+        skills.get(2).use();
+    }
+
+    public void calculateStats(){
+        this.maxHP = initialHP + (15 * level) + (vit * 2);
+        this.maxEnergy = initialEnergy + (15 * level) + (mag * 2);
+        this.energyRegen = maxEnergy * 0.1 + (mag / 100);
+
+        this.attack = pow * 3;
+        this.defense = vit * 1.5;
+        nextLevelExp = 10 * Math.pow(level, 2);
     }
 
     public void setAction() {

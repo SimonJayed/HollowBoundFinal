@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 import misc.KeyHandler;
 
@@ -19,6 +20,12 @@ public class Player extends Entity{
     public String playing = "";
 
     public int statPoints = 0;
+    public int areaLevel = 1;
+    public int steps = 0;
+    public int stepLimit;
+
+    public boolean isSafe = false;
+    public boolean encounterReset = true;
 
     public BufferedImage attack1, attack2;
     public BufferedImage runUp1, runUp2, runDown1, runDown2, runLeft1, runLeft2, runRight1, runRight2;
@@ -67,17 +74,20 @@ public class Player extends Entity{
 
     public void setDefaultValues(){
         gp.currentMap = 0;
-        worldX = spawnPointX = gp.tileSize * 14;
-        worldY = spawnPointY = gp.tileSize * 28;
+        worldX = spawnPointX = gp.tileSize * 1;
+        worldY = spawnPointY = gp.tileSize * 10;
         direction = "down";
 
-        statPoints = 1;
+        statPoints = 5;
         switch(playing){
             case "fort":{
                 setName("Fort");
                 getImage("fort");
                 setDefaultValues(1, 400, 100,4, 15, 6, 4, 5,  15);
                 getCombatImages("fort");
+                skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
+                skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
+                skills.add(new Skill("SMAAAAASHHHHH", "Deals damage to the enemy equivalent to health lost and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), maxEnergy*0.8, 2));
                 break;
             }
             case "amaryllis":{
@@ -118,11 +128,13 @@ public class Player extends Entity{
         checkDefeated();
         checkLevelUp();
         calculateStats();
+        encounter();
         if (keyH.qPressed) {
             System.out.println("Q is pressed...");
         }
 
         if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
+            steps++;
             isUnconscious = false;
 //            System.out.println(getName() + " moves but has been defeated is " + isDefeated );
             if (gp.keyH.upPressed) {
@@ -252,6 +264,84 @@ public class Player extends Entity{
                 }
             }
         }
+    }
+
+    public void encounter(){
+        if(isSafe){
+            return;
+        }
+
+        encounterReset = true;
+
+        if(stepLimit == 0){
+            if(gp.currentMap != 5){
+                stepLimit = gp.randomize(200, 500);
+            }
+            else{
+                stepLimit = gp.randomize(100, 200);
+            }
+        }
+
+
+
+        System.out.println(stepLimit + " and " + steps);
+
+        int enemy = gp.randomize(0,10);
+
+        if(steps>=stepLimit){
+            switch(gp.currentMap){
+                case 0:{
+                    areaLevel = 1;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 5){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                    break;
+                }
+                case 1:{
+                    areaLevel = 10;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 5){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                    break;
+                }
+                case 5:{
+                    areaLevel = 25;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 5){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                }
+            }
+            steps = 0;
+            stepLimit = 0;
+        }
+
     }
 
     public void pickUpObject(int i){

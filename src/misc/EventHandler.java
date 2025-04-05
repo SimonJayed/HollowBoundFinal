@@ -64,10 +64,6 @@ public class EventHandler{
                     gp.event.playEvent0();
                 }
             }
-
-            if(hit(0, 12, 47, "any")){
-//                damagePit(gp.eventState);
-            }
             //ENCOUNTERS
         }
         //MAP 1 (Forest Path) EVENTS
@@ -75,17 +71,17 @@ public class EventHandler{
             //GOING BACK TO MAP 0 (Intro Forest)
             if (hit(1,1, 44, "left") || hit(1,1, 45, "left") || hit(1,1, 46, "left") || hit(1,1, 47, "left")){
                 teleport(gp.playState, 47, 44, "left");
+                System.out.println(gp.player.isSafe);
             }
 
             //GOING TO MAP 2 (Cat Cave Entrance)
             if (hit(1,23, 44, "right")  || hit(1,23, 45, "right") || hit(1,23, 46, "right") || hit(1,23, 47, "right")){
                 teleport(gp.playState, 2, 35, "right");
+                gp.player.isSafe = true;
+                System.out.println(gp.player.isSafe);
             }
 
             //ENCOUNTERS
-            if(hit(1,19,47, "any") || hit(1,19,44, "any") || hit(1,19,45, "any") || hit(1,19,44, "any")){
-                opponentEncounter(gp.livingEntity[gp.currentMap], 4, 19, 47);
-            }
         }
         //MAP 2 (Cat Cave Entrance) EVENTS
         if (canTouchEvent && gp.currentMap == 2){
@@ -124,6 +120,7 @@ public class EventHandler{
             if (hit(3,48, 38, "right") || hit(3,48, 39, "right") || hit(3,48, 40, "right") || hit(3,48, 41, "right")){
                 teleport(gp.playState, 2, 19, "right");
                 gp.ui.addMessage("Went to Graveyard");
+                System.out.println(gp.player.isSafe);
             }
 
             //ENCOUNTERS
@@ -148,6 +145,7 @@ public class EventHandler{
             //GOING TO MAP 5
             if (hit(4,11, 13, "up")){
 //                teleport(gp.playState, 2, 41, "right");
+                gp.player.isSafe = true;
                 gp.ui.addMessage("Went to Old Man's Forest");
             }
 
@@ -280,6 +278,8 @@ public class EventHandler{
         gp.player.worldX = gp.player.spawnPointX = gp.tileSize * x ;
         gp.player.worldY = gp.player.spawnPointY =  gp.tileSize * y;
         System.out.println("Map Changed");
+        gp.player.isSafe = false;
+        gp.player.encounterReset = true;
         gp.ui.startFadeIn();
     }
 

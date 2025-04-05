@@ -41,7 +41,7 @@ public class TitleScreen implements Screen{
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(50f));
         String text = "HollowBound";
-        x = gp.ui.getXforCenteredText(g2, text);
+        x = gp.ui.getXforCenteredText(text);
         y = gp.screenHeight / 5;
 
         g2.drawString(text, x, y);
@@ -52,7 +52,7 @@ public class TitleScreen implements Screen{
         text = "NEW GAME";
         g2.setFont(g2.getFont().deriveFont(40f));
         g2.setColor(Color.black);
-        x = gp.ui.getXforCenteredText(g2, text);
+        x = gp.ui.getXforCenteredText(text);
         y += gp.tileSize * 6;
         g2.drawString(text, x, y);
 
@@ -68,7 +68,7 @@ public class TitleScreen implements Screen{
         text = "LOAD GAME";
         g2.setFont(g2.getFont().deriveFont(40f));
         g2.setColor(Color.black);
-        x = gp.ui.getXforCenteredText(g2, text);
+        x = gp.ui.getXforCenteredText(text);
         y += gp.tileSize + 5;
         g2.drawString(text, x, y);
 
@@ -80,30 +80,15 @@ public class TitleScreen implements Screen{
 
         g2.drawString(text, x - 3, y - 3);
 
-        text = "SETTINGS";
+        text = "QUIT GAME";
         g2.setFont(g2.getFont().deriveFont(40f));
         g2.setColor(Color.black);
-        x = gp.ui.getXforCenteredText(g2, text);
+        x = gp.ui.getXforCenteredText(text);
         y += gp.tileSize + 5;
         g2.drawString(text, x, y);
 
         g2.setColor(Color.white);
         if (commandNum == 2) {
-            g2.drawString(">", x - gp.tileSize + 10, y);
-        }
-
-
-        g2.drawString(text, x - 3, y - 3);
-
-        text = "QUIT GAME";
-        g2.setFont(g2.getFont().deriveFont(40f));
-        g2.setColor(Color.black);
-        x = gp.ui.getXforCenteredText(g2, text);
-        y += gp.tileSize + 5;
-        g2.drawString(text, x, y);
-
-        g2.setColor(Color.white);
-        if (commandNum == 3) {
             g2.drawString(">", x - gp.tileSize + 10, y);
         }
         g2.drawString(text, x - 3, y - 3);

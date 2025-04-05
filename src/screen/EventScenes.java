@@ -51,8 +51,6 @@ public class EventScenes implements Screen{
                     if(!entitySet){
                         //SET ENTITIES
                         dialogues.clear();
-                        gp.livingEntity[1][1] = gp.livingEntity[0][3];
-                        gp.livingEntity[1][1].setEvent("left", 7, 45, 2, 1, true);
 
 
                         //SET PLAYER
@@ -77,7 +75,7 @@ public class EventScenes implements Screen{
                     if(!entitySet){
                         //SET ENTITIES
                         dialogues.clear();
-                        gp.livingEntity[4][5] = gp.livingEntity[0][3];
+                        gp.livingEntity[4][5] = gp.companion2;
                         gp.livingEntity[4][5].setEvent("up", 26, 37, 2, 1, true);
                         gp.livingEntity[4][6].setEvent("left", 26, 33, 2, 1, true);
 
@@ -139,29 +137,16 @@ public class EventScenes implements Screen{
         if(!gp.ui.fading){
             eventNum = 0;
             int sequenceLimit = dialogues.size();
-            System.out.println("Dialogue size: " + dialogues.size());
-            System.out.println("Entityet: " + entitySet);
             buffer++;
 
 
-            if (gp.livingEntity[0][3] != null) {
-                gp.livingEntity[1][1] = gp.livingEntity[0][3];
-            }
-
-            if(sequenceCheck == 0 && buffer > 20){
-                gp.livingEntity[1][1].isIdling = false;
-            }
-
-            if (gp.livingEntity[1][1].collisionOn && sequenceCheck == 1) {
+            if (sequenceCheck == 0) {
                 System.out.println("Sequence: " + sequenceCheck);
                 buffer = 0;
+                dialogueOn = true;
             }
 
             if (sequenceCheck == 2) {
-                System.out.println("Sequence: " + sequenceCheck);
-//                sceneBackground = setBackground("catCaveScene1");
-            }
-            if (sequenceCheck == 3) {
                 System.out.println("Sequence: " + sequenceCheck);
             }
 
@@ -169,16 +154,6 @@ public class EventScenes implements Screen{
                 if(buffer > 50){
                     eventFinished = true;
                     event0Flag = true;
-
-                    Entity entity = gp.livingEntity[1][1];
-                    System.out.println("Sequence: " + sequenceCheck);
-                    if (entity != null) {
-                        gp.livingEntity[1][1] = null;
-                        gp.entityList.remove(entity);
-                        gp.livingEntity[0][3] = entity;
-                        entity.worldX = entity.spawnPointX = 8 * gp.tileSize;
-                        entity.worldY = entity.spawnPointY = 10 * gp.tileSize;
-                    }
 
                     eventExit();
                 }
@@ -215,10 +190,9 @@ public class EventScenes implements Screen{
                 eventFinished = true;
                 event1Flag = true;
 
-                Entity entity = gp.livingEntity[0][3];
-                gp.livingEntity[0][3] = null;
+                Entity entity = gp.livingEntity[4][5];
+                gp.livingEntity[4][5] = null;
                 gp.entityList.remove((entity));
-                gp.livingEntity[4][5].hasEvent = false;
                 gp.livingEntity[4][6].hasEvent = false;
 
                 eventExit();

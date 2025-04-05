@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 import java.awt.*;
@@ -9,7 +10,6 @@ public class NPC_Fort extends Entity {
     public NPC_Fort(GamePanel gp) {
         super(gp);
 
-        type = 2;
         setName("Fort");
 
         solidArea = new Rectangle();
@@ -22,7 +22,12 @@ public class NPC_Fort extends Entity {
 
         getImage("fort");
         setDefaultValues(1, 400, 100,4, 15, 6, 4, 5,  15);
-//        setDialogue();
+
+        skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
+        skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
+        skills.add(new Skill("SMAAAAASHHHHH", "Deals damage to the enemy equivalent to health lost and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), maxEnergy*0.8, 2));
+
+
     }
 
     public void setStatIncrements(){
@@ -30,6 +35,16 @@ public class NPC_Fort extends Entity {
         this.pow += 2;
         this.mag += 1;
         this.agi += 1;
+    }
+
+    public void calculateStats(){
+        this.maxHP = initialHP + (15 * level) + (vit * 2);
+        this.maxEnergy = initialEnergy + (15 * level) + (mag * 2);
+        this.energyRegen = maxEnergy * 0.1 + (mag / 100);
+
+        this.attack = pow * 3;
+        this.defense = vit * 1.5;
+        nextLevelExp = 10 * Math.pow(level, 2);
     }
 
     public void setAction() {

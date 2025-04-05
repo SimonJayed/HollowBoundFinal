@@ -166,26 +166,6 @@ public class AssetSetter {
         int mapNum = 0;
         int i = 0;
         //MAP1
-        gp.livingEntity[0][i] = new NPC_OldMan(gp);
-        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 11 * gp.tileSize;
-        gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 31 * gp.tileSize;
-        gp.livingEntity[0][i].setLevel(100);
-        i++;
-        gp.livingEntity[0][i] = new NPC_Sylvie(gp);
-        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 11 * gp.tileSize;
-        gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 28 * gp.tileSize;
-        gp.livingEntity[0][i].setLevel(5);
-        i++;
-        gp.livingEntity[0][i] = new NPC_Fort(gp);
-        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 11 * gp.tileSize;
-        gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 30 * gp.tileSize;
-        gp.livingEntity[0][i].setLevel(10);
-        i++;
-        gp.livingEntity[0][i] = new NPC_Amaryllis(gp);
-        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 8 * gp.tileSize;
-        gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 15 * gp.tileSize;
-        gp.livingEntity[0][i].setLevel(50);
-        i++;
 
 
         //MAP 2
