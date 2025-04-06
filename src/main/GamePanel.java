@@ -1,5 +1,6 @@
 package main;
 
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import misc.AssetSetter;
@@ -17,6 +18,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
+
+import data.SaveLoad;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -36,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int currentMap = 0;
 
     public double FPS = 60;
+    public SaveLoad saveLoad;
 
     int failCTR = 0;
 
@@ -85,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        saveLoad = new SaveLoad(this);
     }
 
     public void setupGame(){
@@ -268,5 +273,4 @@ public class GamePanel extends JPanel implements Runnable {
         sound.setFile(i);
         sound.play();
     }
-
 }

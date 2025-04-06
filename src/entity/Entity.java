@@ -41,6 +41,8 @@ public abstract class Entity {
     public double agi;
     public double luck;
 
+    public String playing;
+
     public double tempDef, tempAtk;
 
     public ArrayList<Skill> skills = new ArrayList<>();

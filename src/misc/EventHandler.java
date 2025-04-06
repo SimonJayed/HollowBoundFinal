@@ -378,7 +378,6 @@ public class EventHandler{
         else{
             canTouchEvent = true;
         }
-
     }
 }
 

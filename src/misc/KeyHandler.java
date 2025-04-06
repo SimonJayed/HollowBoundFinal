@@ -5,6 +5,7 @@ import main.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class KeyHandler implements KeyListener {
@@ -57,7 +58,9 @@ public class KeyHandler implements KeyListener {
                         gp.sound.setVolume(-25.0f);
                     }
                     if (gp.titleScreen.commandNum == 1) {
-
+                        gp.saveLoad.load();
+                        gp.gameState = gp.playState;
+                        gp.playMusic(0);
                     }
                     if (gp.titleScreen.commandNum == 2) {
 
@@ -443,7 +446,11 @@ public class KeyHandler implements KeyListener {
 
                         }
                         if(gp.inventoryScreen.commandNum == 3){
-
+                            try {
+                                gp.saveLoad.save();
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
                         if(gp.inventoryScreen.commandNum == 4){
 
