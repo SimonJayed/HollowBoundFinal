@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 public class MOB_HollowHuman extends Entity {
@@ -19,8 +20,11 @@ public class MOB_HollowHuman extends Entity {
 
         getImage("hollowedMob");
         setDefaultValues(1, 50, 50,2,5, 5, 5, 5, 0);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+2));
-        setDialogue();
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+8));
+
+        skills.add(new Skill("Punch", "Punches enemy.", pow, 25+maxEnergy*0.2, 2, "DAMAGE"));
+        skills.add(new Skill("Stronger Punch", "Punches enemy harder.", pow*1.2, 25+maxEnergy*0.4, 3, "DAMAGE"));
+        skills.add(new Skill("STRONGEST PUNCH", "PUNCHES ENEMY HARDEST.", pow*3, 25+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){

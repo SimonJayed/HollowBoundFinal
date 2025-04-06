@@ -93,14 +93,12 @@ public class UI {
         else if (gp.gameState == gp.loadGameState) {
             drawLoadGameScreen();
         }
-        else if (gp.gameState == gp.settingsState) {
-            drawSettingsScreen();
-        }
         else if (gp.gameState == gp.characterPickState) {
             gp.pickScreen.loadImages();
             gp.pickScreen.draw(g2);
         }
         else if (gp.gameState == gp.dialogueState) {
+            gp.map.miniMapOn = false;
             drawPlayerLife();
             drawDialogueScreen();
         }
@@ -298,9 +296,7 @@ public class UI {
     public void drawLoadGameScreen(){
 
     }
-    public void drawSettingsScreen(){
 
-    }
 
     public void drawDialogueScreen() {
         int width = gp.screenWidth - (gp.tileSize * 2);

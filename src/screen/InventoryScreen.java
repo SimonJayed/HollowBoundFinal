@@ -19,6 +19,10 @@ public class InventoryScreen implements Screen{
     public int commandNum = 0;
     public int charNum = 0;
 
+    public boolean isStatPanel = true;
+    public boolean isSettings = false;
+    public boolean isInventory = false;
+
     public InventoryScreen (GamePanel gp){
         this.gp = gp;
     }
@@ -42,15 +46,69 @@ public class InventoryScreen implements Screen{
     public void draw(Graphics2D g2) {
         this.g2 = g2;
 
-        if(charNum == 0){
-            drawStats(gp.player);
-            gp.player.calculateStats();
+        if(isStatPanel){
+            if(charNum == 0){
+                drawStats(gp.player);
+                gp.player.calculateStats();
+            }
+            else if (charNum == 1){
+                drawStats(gp.companion1);
+            }
+            else{
+                drawStats(gp.companion2);
+            }
         }
-        else if (charNum == 1){
-            drawStats(gp.companion1);
+        else if(isInventory){
+
+        }else if(isSettings){
+            drawSettings(g2);
         }
-        else{
-            drawStats(gp.companion2);
+
+    }
+
+    public void drawSettings(Graphics2D g2){
+        int frameX = gp.tileSize;
+        int frameY = gp.tileSize;
+        g2.drawImage(statPanel, frameX, frameY,null);
+
+        int textX;
+        int textY;
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25f));
+        String text = "Options";
+        textX = gp.ui.getXforCenteredText(text);
+        textY = gp.tileSize*3+10;
+        g2.drawString(text, textX, textY);
+
+        g2.setFont(g2.getFont().deriveFont(18f));
+        textY += gp.tileSize*2;
+        g2.drawString("MUSIC", textX, textY);
+        if(commandNum == 0){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        textY += gp.tileSize;
+        g2.drawString("SOUND EFFECTS", textX, textY);
+        if(commandNum == 1){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        textY += gp.tileSize;
+        g2.drawString("CONTROL", textX, textY);
+        if(commandNum == 2){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        textY += gp.tileSize;
+        g2.drawString("SAVE GAME", textX, textY);
+        if(commandNum == 3){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        textY += gp.tileSize;
+        g2.drawString("MAIN MENU", textX, textY);
+        if(commandNum == 4){
+            g2.drawString(">", textX-25, textY);
         }
     }
 
@@ -64,7 +122,7 @@ public class InventoryScreen implements Screen{
 
 
         //Inventory Content
-        g2.setColor(new Color(59, 61, 62));
+        g2.setColor(new Color(0, 0, 0));
         int x = gp.tileSize*3+gp.tileSize/2;
         int y = gp.tileSize*4-7;
 
@@ -79,10 +137,12 @@ public class InventoryScreen implements Screen{
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14f));
         x = gp.screenWidth/2 - gp.tileSize;
-        y = gp.tileSize*4;
+        y = gp.tileSize*3;
         g2.drawString("LEVEL: " + gp.df.format(entity.level), x, y);
         if(entity == gp.player){
+            g2.setColor(new Color(255, 0, 0));
             g2.drawString("STAT POINTS: " + gp.player.statPoints, x + gp.tileSize*3, y);
+            g2.setColor(new Color(0, 0, 0));
         }
         y += gp.tileSize/2;
         g2.drawString("EXP: " + gp.df.format(entity.exp), x, y);
@@ -115,7 +175,6 @@ public class InventoryScreen implements Screen{
             addStatPoints(g2, x, gp.tileSize*9-8);
         }
     }
-
     public void addStatPoints(Graphics2D g2, int x, int y){
 
         g2.setColor(new Color(255,255,255));

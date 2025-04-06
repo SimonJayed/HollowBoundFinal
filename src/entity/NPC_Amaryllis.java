@@ -18,60 +18,85 @@ public class NPC_Amaryllis extends Entity {
         this.solidArea.height = 32;
 
         getImage("amaryllis");
-        setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
+        setDefaultValues(5, 75, 100,5,5, 8, 10, 13, 9);
         setDialogue();
 
-        skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));
-        skills.add(new Skill("Liquid Experiment", "Gives a random buff to an ally.", 25, maxEnergy*0.3, 2));
-        skills.add(new Skill("Unleash", "Transforms into her beast form and gives a boost to her stats for 3 turns", 135.6, maxEnergy*0.8, 5));
+        skills.add(new Skill("Disabling Reagent", "Silences the enemy for 2 turns, rendering them unable to use skills, along with a random debuff.", agi, 50+maxEnergy*0.3, 4, "DAMAGE"));
+        skills.add(new Skill("Experimental Cure", "Replaces an ally's status effects (including positive ones) with a random buff that lasts 3 turns", agi/2, 50+maxEnergy*0.3, 3, "BUFF_ALLY"));
+        skills.add(new Skill("Unleash", "Unleashes a flurry of 3-5 attacks at the enemy.", agi/2, 50+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){
         this.vit += 1;
-        this.pow += 1;
-        this.mag += 2;
+        this.pow += 2;
+        this.mag += 1;
         this.agi += 3;
     }
 
-    public void useSkill1(Entity entity){
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                gp.battleScreen.output = skills.get(0).power;
+                skills.get(0).use();
+
+                target.hp -= gp.battleScreen.output;
 
 
-        gp.ui.addMessage(getName() + "");
-        skills.get(0).use();
-    }
+                gp.ui.addMessage(getName() + " heals " + target.getName() + " for " + skills.get(0).power + ".");
 
-    public void useSkill2(Entity entity){
-        skills.get(1).use();
-    }
-
-    public void useSkill3(Entity entity){
-        skills.get(2).use();
-    }
-
-    public void setAction() {
-        actionLockCounter++;
-
-        if (actionLockCounter >= gp.randomize(120, 250)) {
-            int i = gp.randomize(1, 150);
-
-            if (i <= 25) {
-                direction = "up";
-                isIdling = false;
-            } else if (i <= 50) {
-                direction = "down";
-                isIdling = false;
-            } else if (i <= 75) {
-                direction = "left";
-                isIdling = false;
-            } else if (i <= 100) {
-                direction = "right";
-                isIdling = false;
-            } else if (i <= 125) {
-                isIdling = true;
+                target.isHealed = true;
+                break;
             }
-            actionLockCounter = 0;
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                skills.get(1).use();
+                gp.battleScreen.output = skills.get(1).power;
+
+                target.healing = 0;
+                target.strengthened = 0;
+                target.hardened = 0;
+
+                int buff = gp.randomize(0, 2);
+
+                switch(buff){
+                    case 0:{
+                        target.healing = 3;
+                        break;
+                    }
+                    case 1:{
+                        target.tempDef = target.defense;
+
+                        target.defense += gp.battleScreen.output;
+                        target.hardened = 3;
+                        break;
+                    }
+                    case 2:{
+                        target.tempAtk = target.attack;
+
+                        target.attack += gp.battleScreen.output;
+                        target.strengthened = 3;
+                        break;
+                    }
+                }
+
+                gp.ui.addMessage(getName() + " experiments on " + target.getName() + ", giving a random buff .");
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                skills.get(2).use();
+                gp.battleScreen.output = skills.get(2).power;
+
+                int attackNum = gp.randomize(3,5);
+
+                for(int i = 0; i<attackNum; i++){
+                    target.hp -= gp.battleScreen.output;
+                }
+                break;
+            }
         }
-        spriteAnim(2);
     }
 }
 

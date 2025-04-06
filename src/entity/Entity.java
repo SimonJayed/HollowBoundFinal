@@ -41,7 +41,13 @@ public abstract class Entity {
     public double agi;
     public double luck;
 
+    public double tempDef, tempAtk;
+
     public ArrayList<Skill> skills = new ArrayList<>();
+    public int healing = 0;
+    public int strengthened = 0;
+    public int hardened = 0;
+
 
     public int hollowCounter = 0;
 
@@ -55,7 +61,8 @@ public abstract class Entity {
     public int spriteCounter = 0;
     public int spriteNum = 2;
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public int type;
+    public int type = 1;
+    public int aggro = 0;
 
     public String dialogues[] = new String[20];
     int dialogueIndex = 0;

@@ -3,9 +3,6 @@ package misc;
 import entity.*;
 import main.GamePanel;
 import object.*;
-import object.foreground.FG_Tree1;
-import object.foreground.FG_Tree2;
-import object.foreground.FG_Tree3;
 
 public class AssetSetter {
     GamePanel gp;
@@ -43,33 +40,10 @@ public class AssetSetter {
     public void setObjectEntity(){
         int mapNum = 0;
         int i= 0;
-        gp.objectEntity[0][i] = new OBJ_Boots(gp);
-        gp.objectEntity[0][i].worldX = 23 * gp.tileSize;
-        gp.objectEntity[0][i].worldY = 10 * gp.tileSize;
-        i++;
 
         //MAP1
         i = 0;
-//        gp.foreground[1][i] = new FG_Tree3(gp);
-//        gp.foreground[1][i].worldX = 0;
-//        gp.foreground[1][i].worldY = 45 * gp.tileSize;
-//        i++;
-        gp.foreground[1][i] = new FG_Tree2(gp);
-        gp.foreground[1][i].worldX = 0;
-        gp.foreground[1][i].worldY = 46 * gp.tileSize;
-        i++;
-        gp.foreground[1][i] = new FG_Tree2(gp);
-        gp.foreground[1][i].worldX = 3 * gp.tileSize;
-        gp.foreground[1][i].worldY = 45 * gp.tileSize;
-        i++;
-        gp.foreground[1][i] = new FG_Tree3(gp);
-        gp.foreground[1][i].worldX = 16 * gp.tileSize;
-        gp.foreground[1][i].worldY = 45 * gp.tileSize;
-        i++;
-        gp.foreground[1][i] = new FG_Tree2(gp);
-        gp.foreground[1][i].worldX = 11 * gp.tileSize;
-        gp.foreground[1][i].worldY = 46 * gp.tileSize;
-        i++;
+
 
 
         //MAP2
@@ -79,34 +53,7 @@ public class AssetSetter {
 
         //MAP 5
         i = 0;
-        gp.foreground[5][i] = new FG_Tree3(gp);
-        gp.foreground[5][i].worldX = 2 * gp.tileSize;
-        gp.foreground[5][i].worldY = 18 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree2(gp);
-        gp.foreground[5][i].worldX = 7 * gp.tileSize;
-        gp.foreground[5][i].worldY = 17 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree1(gp);
-        gp.foreground[5][i].worldX = 0 * gp.tileSize;
-        gp.foreground[5][i].worldY = 20 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree1(gp);
-        gp.foreground[5][i].worldX = 16 * gp.tileSize;
-        gp.foreground[5][i].worldY = 19 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree1(gp);
-        gp.foreground[5][i].worldX = 25 * gp.tileSize;
-        gp.foreground[5][i].worldY = 26 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree1(gp);
-        gp.foreground[5][i].worldX = 14 * gp.tileSize;
-        gp.foreground[5][i].worldY = 39 * gp.tileSize;
-        i++;
-        gp.foreground[5][i] = new FG_Tree1(gp);
-        gp.foreground[5][i].worldX = 24 * gp.tileSize;
-        gp.foreground[5][i].worldY = 41 * gp.tileSize;
-        i++;
+
 
         //MAP 8
         i = 0;
@@ -117,23 +64,27 @@ public class AssetSetter {
     public void setLivingEntity(){
         int mapNum = 0;
         int i = 0;
-        //MAP1
+
+        //MAP 0
+        gp.livingEntity[0][i] = new NPC_Miming(gp);
+        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 46 * gp.tileSize;
+        gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 39 * gp.tileSize;
+        gp.livingEntity[0][i].hasEvent = true;
+        i++;
+
+
+        //MAP 1
 
 
         //MAP 2
-//        gp.livingEntity[1][i] = new NPC_Amaryllis(gp);
-//        gp.livingEntity[1][i].worldX = gp.livingEntity[1][i].spawnPointX = 19 * gp.tileSize;
-//        gp.livingEntity[1][i].worldY = gp.livingEntity[1][i].spawnPointY = 47 * gp.tileSize;
-//        gp.livingEntity[1][i].hasEvent = true;
-//        gp.livingEntity[1][i].direction = "up";
-//        gp.livingEntity[1][i].setLevel(10);
-//        System.out.println(gp.livingEntity[1][i].getName() +" has event in Map " + gp.currentMap);
+
 
         //MAP 3
-        gp.livingEntity[3][0] = new NPC_MamaPausy(gp);
-        gp.livingEntity[3][0].worldX = gp.livingEntity[3][0].spawnPointX = 46 * gp.tileSize;
-        gp.livingEntity[3][0].worldY = gp.livingEntity[3][0].spawnPointY = 39 * gp.tileSize;
-        gp.livingEntity[3][0].hasEvent = true;
+        i = 0;
+        gp.livingEntity[3][i] = new NPC_MamaPausy(gp);
+        gp.livingEntity[3][i].worldX = gp.livingEntity[3][i].spawnPointX = 46 * gp.tileSize;
+        gp.livingEntity[3][i].worldY = gp.livingEntity[3][i].spawnPointY = 39 * gp.tileSize;
+        gp.livingEntity[3][i].hasEvent = true;
 
         //MAP 4
         i = 0;

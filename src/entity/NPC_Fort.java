@@ -23,9 +23,9 @@ public class NPC_Fort extends Entity {
         getImage("fort");
         setDefaultValues(1, 100, 50,4, 15, 6, 4, 5,  15);
 
-        skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
-        skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
-        skills.add(new Skill("SMAAAAASHHHHH", "Deals damage to the enemy equivalent to health lost and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), maxEnergy*0.8, 2));
+        skills.add(new Skill("Rage Bait", "Taunts the enemy and increases defense for 2 turns.", vit/2, 25+maxEnergy*0.2, 3, "BUFF_SELF"));
+        skills.add(new Skill("Meat Shield", "Grants additional defense to an ally for 3 turns.", vit*1.5, 25+maxEnergy*0.4, 3, "BUFF_ALLY"));
+        skills.add(new Skill("SMAAAAASHHHHH", "Hits the enemy equivalent to lost health and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), 25+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){
@@ -33,6 +33,45 @@ public class NPC_Fort extends Entity {
         this.pow += 2;
         this.mag += 1;
         this.agi += 1;
+    }
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                gp.battleScreen.output = skills.get(0).power;
+                skills.get(0).use();
+
+                target.tempDef = target.defense;
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " taunts " + target.getName() + " and increases own defense by " + gp.battleScreen.output + " for 2 turns.");
+
+                target.hardened = 2;
+                aggro = 2;
+                break;
+            }
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                gp.battleScreen.output += skills.get(1).power;
+                skills.get(1).use();
+
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " shields " + target.getName() + " and increases their defense by " + gp.battleScreen.output + " for 3 turns.");
+
+                target.hardened = 3;
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                gp.battleScreen.output += skills.get(2).power;
+                skills.get(2).use();
+
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " hits " + target.getName() + " with the UNITED STATES OF SMASH for " + gp.battleScreen.output + " damage.");
+
+                break;
+            }
+        }
     }
 
     public void calculateStats(){

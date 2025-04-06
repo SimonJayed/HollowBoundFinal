@@ -57,14 +57,6 @@ public class EventHandler{
             //GOING TO MAP 1 (Forest Path)
             if (hit(0,48, 42, "right") || hit(0,48, 43, "right") || hit(0,48, 43, "right") || hit(0,48, 44, "right") || hit(0,48, 45, "right") || hit(0,48, 46, "right")){
                 teleport(gp.playState, 2, 45, "right");
-                if(!gp.event.event0Flag){
-                    System.out.println("Event 0 played");
-                    gp.event.dialogueFinished = false;
-                    gp.event.dialogueOn = true;
-//                    gp.gameState = gp.eventState;
-                    gp.ui.startFadeIn();
-                    gp.event.playEvent0();
-                }
             }
             //ENCOUNTERS
         }
@@ -94,7 +86,7 @@ public class EventHandler{
                 teleport(gp.playState, 24, 37, "up");
                 gp.ui.addMessage("Went into Cat Cave");
                 gp.player.isSafe = true;
-                if(!gp.event.event1Flag && !gp.event.event2Flag){
+                if(!gp.player.event1Flag && !gp.player.event2Flag){
                     gp.event.eventNum = 1;
                     gp.gameState = gp.eventState;
                     gp.ui.startFadeIn();
@@ -125,7 +117,7 @@ public class EventHandler{
             //ENCOUNTERS
             if (hit(3,28, 39, "right") || hit(2,28, 40, "right") || hit(2,28, 41, "right") || hit(2,28, 42, "right")){
                 gp.ui.addMessage("Ambushed by Mama Pussicles");
-                if(!gp.event.event2Flag){
+                if(!gp.player.event2Flag){
                     gp.event.eventNum = 2;
                     gp.gameState = gp.eventState;
                     gp.ui.startFadeIn();

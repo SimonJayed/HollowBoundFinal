@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 public class MOB_Beast extends Entity {
@@ -20,15 +21,57 @@ public class MOB_Beast extends Entity {
 
         getImage("hollowedBeast");
         setDefaultValues(1, 100, 50,2,10, 13, 10, 13, 0);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+2));
-        setDialogue();
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+3));
+
+        skills.add(new Skill("STOMP", "Stomps enemy.", pow, 25+maxEnergy*0.2, 2, "DAMAGE"));
+        skills.add(new Skill("Stronger STOMP", "Stomps enemy harder.", pow*1.2, 25+maxEnergy*0.4, 3, "DAMAGE"));
+        skills.add(new Skill("STRONGEST STOMP", "STOMPS ENEMY HARDEST.", pow*3, 25+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){
-        this.vit += 4;
+        this.vit += 3;
         this.pow += 3;
         this.mag += 1;
         this.agi += 1;
+    }
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                skills.get(0).use();
+                gp.battleScreen.output = skills.get(0).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " stomps " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                skills.get(1).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " stomps hard on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                skills.get(2).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+                target.hp -= gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " stomps REALLY HARD on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+        }
     }
 
     public void checkDefeated(){
@@ -86,13 +129,6 @@ public class MOB_Beast extends Entity {
             actionLockCounter = 0;
         }
         spriteAnim(2);
-    }
-
-    public void setDialogue() {
-    }
-
-    public void speak(){
-        super.speak();
     }
 }
 

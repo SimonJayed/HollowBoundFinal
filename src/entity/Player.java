@@ -30,6 +30,14 @@ public class Player extends Entity{
     public BufferedImage attack1, attack2;
     public BufferedImage runUp1, runUp2, runDown1, runDown2, runLeft1, runLeft2, runRight1, runRight2;
 
+    public boolean event0Flag = false;
+    public boolean event1Flag = false;
+    public boolean event2Flag = false;
+    public boolean event3Flag = false;
+    public boolean event4Flag = false;
+    public boolean event5Flag = false;
+    public boolean event6Flag = false;
+
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
@@ -73,45 +81,85 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-//        gp.currentMap = 0;
-//        worldX = spawnPointX = gp.tileSize * 1;
-//        worldY = spawnPointY = gp.tileSize * 10;
         gp.currentMap = 0;
-        worldX = spawnPointX = gp.tileSize * 46;
-        worldY = spawnPointY = gp.tileSize * 44;
+        worldX = spawnPointX = gp.tileSize * 1;
+        worldY = spawnPointY = gp.tileSize * 10;
+//        gp.currentMap = 0;
+//        worldX = spawnPointX = gp.tileSize * 46;
+//        worldY = spawnPointY = gp.tileSize * 44;
 //        gp.currentMap = 9;
 //        worldX = spawnPointX = gp.tileSize * 2;
 //        worldY = spawnPointY = gp.tileSize * 43;
 //        direction = "right";
 
-        statPoints = 5;
+        statPoints = 1;
         switch(playing){
             case "fort":{
                 setName("Fort");
                 getImage("fort");
-                setDefaultValues(1, 100, 50,4, 15, 6, 4, 5,  15);
+                setDefaultValues(1, 100, 50,4, 15, 60, 4, 5,  15);
                 getCombatImages("fort");
-                skills.add(new Skill("Rage Bait", "Taunts the enemy for 3 turns and increases defense by skill power.", (vit*1.2)+(maxEnergy*0.2), maxEnergy*0.2, 4));
-                skills.add(new Skill("Meat Shield", "Grants a shield to an ally", (maxHP*0.2)+(vit*1.5)+(maxEnergy*0.4), maxEnergy*0.4, 2));
-                skills.add(new Skill("SMAAAAASHHHHH", "Deals damage to the enemy equivalent to health lost and vitality stat.", (maxHP-hp*0.8)+(vit*1.2), maxEnergy*0.8, 2));
+                skills.add(new Skill("Rage Bait", "Taunts the enemy and increases defense for 2 turns.", vit*0.4, 25+maxEnergy*0.2, 3, "BUFF_SELF"));
+                skills.add(new Skill("Meat Shield", "Grants additional defense to an ally for 3 turns.", vit*0.5, 25+maxEnergy*0.4, 3, "BUFF_ALLY"));
+                skills.add(new Skill("SMAAAAASHHHHH", "Hits the enemy equivalent to lost health and defense stat.", (maxHP-hp*0.8)+(defense*1.2), 25+maxEnergy*0.8, 5, "DAMAGE"));
                 break;
             }
             case "amaryllis":{
                 setName("Amaryllis");
                 getImage("amaryllis");
                 setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
-                skills.add(new Skill("Nature's Embrace", "Lowers the enemy's agility with a chance to stun.", 135.6, maxEnergy*0.3, 2));
-                skills.add(new Skill("Liquid Experiment", "Gives a random buff to an ally.", 25, maxEnergy*0.3, 2));
-                skills.add(new Skill("Unleash", "Transforms into her beast form and gives a boost to her stats for 3 turns", 135.6, maxEnergy*0.8, 5));
+
+                skills.add(new Skill("Disabling Reagent", "Silences the enemy, rendering them unable to use skills, along with a random debuff that lasts 1 turn.", agi*2, 50+maxEnergy*0.3, 4, "DAMAGE"));
+                skills.add(new Skill("Experimental Cure", "Replaces an ally's status effects (including positive ones) with a random buff that lasts 3 turns.", agi*3, 50+maxEnergy*0.3, 3, "BUFF_ALLY"));
+                skills.add(new Skill("Unleash", "Unleashes a flurry of 3-5 attacks at the enemy.", agi*2, 50+maxEnergy*0.8, 5, "BUFF_SELF"));
                 break;
             }
             case "sylvie":{
                 setName("Sylvie");
                 getImage("sylvie");
                 setDefaultValues(1, 50, 150,3, 7, 5, 19, 5,  9);
-                skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, maxEnergy*0.2, 2));
-                skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy", 25, maxEnergy*0.4, 1));
-                skills.add(new Skill("Bloom of Life", "Creates an explosion of natural energy that damages enemies and heals allies", 135.6, maxEnergy*0.8, 2));
+                skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, maxEnergy*0.2, 2, "BUFF_ALLY"));
+                skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy. Lowers enemy AGI.", 25, maxEnergy*0.4, 1, "DAMAGE"));
+                skills.add(new Skill("Bloom of Life", "Creates an explosion of natural energy that buffs and heals allies, and slightly damages the enemy.", mag*6, maxEnergy*0.8, 2, "BUFF_ALLY"));
+                break;
+            }
+        }
+    }
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                gp.battleScreen.output = skills.get(0).power;
+                skills.get(0).use();
+
+                target.tempDef = target.defense;
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " taunts " + target.getName() + " and increases own defense by " + gp.battleScreen.output + " for 2 turns.");
+
+                target.hardened = 2;
+                aggro = 2;
+                break;
+            }
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                gp.battleScreen.output += skills.get(1).power;
+                skills.get(1).use();
+
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " shields " + target.getName() + " and increases their defense by " + gp.battleScreen.output + " for 3 turns.");
+
+                target.hardened = 3;
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                gp.battleScreen.output += skills.get(2).power;
+                skills.get(2).use();
+
+                target.defense += gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " hits " + target.getName() + " with the UNITED STATES OF SMASH for " + gp.battleScreen.output + " damage.");
+
                 break;
             }
         }
@@ -127,8 +175,8 @@ public class Player extends Entity{
         this.maxEnergy = initialEnergy + (15 * level) + (mag * 2);
         this.energyRegen = maxEnergy * 0.1 + (mag / 100);
 
-        this.attack = pow * 3;
-        this.defense = vit * 1.5;
+        this.attack = pow + 2;
+        this.defense = vit * 0.5;
     }
 
     public void update() {

@@ -21,7 +21,7 @@ public class MOB_Swordsman extends Entity {
 
         getImage("hollowedSwordsman");
         setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
-        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+2));
+        setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
         setDialogue();
     }
 
