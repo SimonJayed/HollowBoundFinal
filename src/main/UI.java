@@ -2,8 +2,6 @@ package main;
 
 import entity.Entity;
 import misc.UtilityTool;
-import object.OBJ_Heart;
-import object.OBJ_Image;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

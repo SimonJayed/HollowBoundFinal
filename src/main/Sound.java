@@ -19,6 +19,15 @@ public class Sound {
             soundURL[1] = getClass().getResource("/sound/AnimalCrossingTalkingSound.wav");
             soundURL[2] = getClass().getResource("/sound/LetterBee-Lag&Niche.wav");
             soundURL[3] = getClass().getResource("/sound/ClickSound.wav");
+            soundURL[4] = getClass().getResource("/sound/EpilogueMusic.wav");
+            soundURL[5] = getClass().getResource("/sound/FirstMap.wav");
+            soundURL[6] = getClass().getResource("/sound/GraveyardMusic.wav");
+            soundURL[7] = getClass().getResource("/sound/CayCaveMusiz.wav");
+            soundURL[8] = getClass().getResource("/sound/SecondMapMusic.wav");
+            soundURL[9] = getClass().getResource("/sound/VeyraBattleMusic.wav");
+            soundURL[10] = getClass().getResource("/sound/VeyraDomainMusic.wav");
+            soundURL[11] = getClass().getResource("/sound/Vs Susie.wav");
+            soundURL[12] = getClass().getResource("/sound/EnemyApproaching.wav");
         } catch (Exception e) {
             e.printStackTrace();
         }

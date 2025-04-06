@@ -2,7 +2,6 @@ package misc;
 
 import entity.*;
 import main.GamePanel;
-import object.*;
 
 public class AssetSetter {
     GamePanel gp;
