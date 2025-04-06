@@ -10,6 +10,9 @@ public class Game {
         window.setSize(864, 672);
         window.setTitle("HollowBound");
 
+        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\HollowBound2.1\\res\\ui\\HollowBound.png");
+        window.setIconImage(icon.getImage());
+
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
 

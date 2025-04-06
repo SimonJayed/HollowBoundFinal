@@ -86,7 +86,7 @@ public class EventHandler{
                 teleport(gp.playState, 24, 37, "up");
                 gp.ui.addMessage("Went into Cat Cave");
                 gp.player.isSafe = true;
-                if(!gp.player.event1Flag && !gp.player.event2Flag){
+                if(gp.player.event1Flag <= 0 && gp.player.event2Flag <= 0){
                     gp.event.eventNum = 1;
                     gp.gameState = gp.eventState;
                     gp.ui.startFadeIn();
@@ -117,7 +117,7 @@ public class EventHandler{
             //ENCOUNTERS
             if (hit(3,28, 39, "right") || hit(2,28, 40, "right") || hit(2,28, 41, "right") || hit(2,28, 42, "right")){
                 gp.ui.addMessage("Ambushed by Mama Pussicles");
-                if(!gp.player.event2Flag){
+                if(gp.player.event2Flag <= 0){
                     gp.event.eventNum = 2;
                     gp.gameState = gp.eventState;
                     gp.ui.startFadeIn();
@@ -152,6 +152,14 @@ public class EventHandler{
             if (hit(5,31, 48, "down") || hit(5,32, 48, "down") || hit(5,33, 48, "down")){
                 teleport(gp.playState, 28, 3, "down");
                 gp.player.isSafe = true;
+                System.out.println("Went to veyra vilalge");
+
+                if(gp.player.event6Flag <= 0){
+                    gp.event.eventNum = 6;
+                    gp.event.playEvent6();
+                    gp.gameState = gp.eventState;
+                    System.out.println("Play event six");
+                }
             }
 
             //ENCOUNTERS
@@ -193,6 +201,13 @@ public class EventHandler{
             }
 
             //ENCOUNTERS
+            if(hit(8, 28, 5, "down")){
+                if(gp.player.event6Flag <= 0){
+                    gp.event.playEvent6();
+                    gp.gameState = gp.eventState;
+                    System.out.println("Play event six");
+                }
+            }
         }
         //MAP 9 (Veyra Hill) EVENTS
         if (canTouchEvent && gp.currentMap == 9){
@@ -209,6 +224,15 @@ public class EventHandler{
             }
 
             //ENCOUNTERS
+            if(hit(9, 3, 18, "up") || hit(9, 4, 18, "any") || hit(9, 5, 18, "any")){
+                opponentEncounter(gp.livingEntity[9], 2, 2, 18);
+            }
+            if((hit(9, 21, 25, "any") || hit(9, 21, 26, "any") || hit(9, 21, 27, "any") || hit(9, 21, 28, "any"))){
+                opponentEncounter(gp.livingEntity[9], 1, 21, 24);
+            }
+            if((hit(9, 40, 35, "any") || hit(9, 40, 36, "any"))){
+                opponentEncounter(gp.livingEntity[9], 0, 40, 34);
+            }
         }
     }
 

@@ -58,8 +58,11 @@ public class NPC_VillagerSynthia extends Entity {
     }
 
     public void setDialogue() {
-        dialogues[0] = "Meowwww...";
-        dialogues[1] = "Prrrrrrrrrrrrrrrrrrrrr...";
+        dialogues[0] = "Villager:\n Hello hehe, welcome to our beloved village.";
+        dialogues[1] = "Fort: \n Don't you have anything else to say?";
+        dialogues[2] = "Villager:\n Hello hehe, welcome to our beloved village.";
+        dialogues[3] = "Villager:\n Hello hehe, welcome to our beloved village.";
+        dialogues[4] = "Fort: \n Let's go, guys. This place creeps me out.";
     }
 
     public void speak(){

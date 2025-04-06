@@ -22,9 +22,9 @@ public class MOB_HollowHuman extends Entity {
         setDefaultValues(1, 50, 50,2,5, 5, 5, 5, 0);
         setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+8));
 
-        skills.add(new Skill("Punch", "Punches enemy.", pow, 25+maxEnergy*0.2, 2, "DAMAGE"));
-        skills.add(new Skill("Stronger Punch", "Punches enemy harder.", pow*1.2, 25+maxEnergy*0.4, 3, "DAMAGE"));
-        skills.add(new Skill("STRONGEST PUNCH", "PUNCHES ENEMY HARDEST.", pow*3, 25+maxEnergy*0.8, 5, "DAMAGE"));
+        skills.add(new Skill("Punch", "Punches enemy.", pow*2, 25+maxEnergy*0.2, 2, "DAMAGE"));
+        skills.add(new Skill("Stronger Punch", "Punches enemy harder.", pow*4, 25+maxEnergy*0.4, 3, "DAMAGE"));
+        skills.add(new Skill("STRONGEST PUNCH", "PUNCHES ENEMY HARDEST.", pow*8, 25+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){
@@ -32,6 +32,45 @@ public class MOB_HollowHuman extends Entity {
         this.pow += 2;
         this.mag += 2;
         this.agi += 2;
+    }
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                skills.get(0).use();
+                gp.battleScreen.output = skills.get(0).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " punches " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                skills.get(1).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " punches hard on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                skills.get(2).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+                target.hp -= gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " punches REALLY HARD on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+        }
     }
 
     public void checkDefeated(){

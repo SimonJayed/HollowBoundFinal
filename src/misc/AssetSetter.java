@@ -47,16 +47,13 @@ public class AssetSetter {
 
 
         //MAP2
-        gp.foreground[2][i] = new OBJ_Door(gp);
-        gp.foreground[2][i].worldX = 29 * gp.tileSize;
-        gp.foreground[2][i].worldY = 22 * gp.tileSize;
-
         //MAP 5
         i = 0;
 
 
         //MAP 8
         i = 0;
+
 
 
     }
@@ -67,7 +64,7 @@ public class AssetSetter {
 
         //MAP 0
         gp.livingEntity[0][i] = new NPC_Miming(gp);
-        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 46 * gp.tileSize;
+        gp.livingEntity[0][i].worldX = gp.livingEntity[0][i].spawnPointX = 42 * gp.tileSize;
         gp.livingEntity[0][i].worldY = gp.livingEntity[0][i].spawnPointY = 39 * gp.tileSize;
         gp.livingEntity[0][i].hasEvent = true;
         i++;
@@ -85,6 +82,8 @@ public class AssetSetter {
         gp.livingEntity[3][i].worldX = gp.livingEntity[3][i].spawnPointX = 46 * gp.tileSize;
         gp.livingEntity[3][i].worldY = gp.livingEntity[3][i].spawnPointY = 39 * gp.tileSize;
         gp.livingEntity[3][i].hasEvent = true;
+        gp.livingEntity[3][i].setLevel(60);
+        gp.livingEntity[3][i].calculateStats();
 
         //MAP 4
         i = 0;
@@ -160,6 +159,49 @@ public class AssetSetter {
         gp.livingEntity[8][i] = new NPC_VillagerOldMan(gp);
         gp.livingEntity[8][i].worldX = gp.livingEntity[8][i].spawnPointX = 38 * gp.tileSize;
         gp.livingEntity[8][i].worldY = gp.livingEntity[8][i].spawnPointY = 13 * gp.tileSize;
+        i++;
+        gp.livingEntity[8][i] = new NPC_VillagerSynthia(gp);
+        gp.livingEntity[8][i].worldX = gp.livingEntity[8][i].spawnPointX = 10 * gp.tileSize;
+        gp.livingEntity[8][i].worldY = gp.livingEntity[8][i].spawnPointY = 17 * gp.tileSize;
+        i++;
+        gp.livingEntity[8][i] = new NPC_VillagerOldMan(gp);
+        gp.livingEntity[8][i].worldX = gp.livingEntity[8][i].spawnPointX = 21 * gp.tileSize;
+        gp.livingEntity[8][i].worldY = gp.livingEntity[8][i].spawnPointY = 25 * gp.tileSize;
+        i++;
+        gp.livingEntity[8][i] = new NPC_VillagerSynthia(gp);
+        gp.livingEntity[8][i].worldX = gp.livingEntity[8][i].spawnPointX = 28 * gp.tileSize;
+        gp.livingEntity[8][i].worldY = gp.livingEntity[8][i].spawnPointY = 36 * gp.tileSize;
+        i++;
+        gp.livingEntity[8][i] = new NPC_VillagerOldMan(gp);
+        gp.livingEntity[8][i].worldX = gp.livingEntity[8][i].spawnPointX = 38 * gp.tileSize;
+        gp.livingEntity[8][i].worldY = gp.livingEntity[8][i].spawnPointY = 28 * gp.tileSize;
+        i++;
+
+        // MAP 9
+        i = 0;
+        gp.livingEntity[9][i] = new NPC_VillagerOldMan(gp);
+        gp.livingEntity[9][i].worldX = gp.livingEntity[9][i].spawnPointX = 40 * gp.tileSize;
+        gp.livingEntity[9][i].worldY = gp.livingEntity[9][i].spawnPointY = 34 * gp.tileSize;
+        gp.livingEntity[9][i].direction = "down";
+        gp.livingEntity[9][i].setLevel(45);
+        gp.livingEntity[9][i].hasEvent = true;
+        gp.livingEntity[9][i].type = 2;
+        i++;
+        gp.livingEntity[9][i] = new NPC_VillagerOldMan(gp);
+        gp.livingEntity[9][i].worldX = gp.livingEntity[9][i].spawnPointX = 21 * gp.tileSize;
+        gp.livingEntity[9][i].worldY = gp.livingEntity[9][i].spawnPointY = 24 * gp.tileSize;
+        gp.livingEntity[9][i].direction = "down";
+        gp.livingEntity[9][i].setLevel(50);
+        gp.livingEntity[9][i].hasEvent = true;
+        gp.livingEntity[9][i].type = 2;
+        i++;
+        gp.livingEntity[9][i] = new NPC_VillagerOldMan(gp);
+        gp.livingEntity[9][i].worldX = gp.livingEntity[9][i].spawnPointX = 2 * gp.tileSize;
+        gp.livingEntity[9][i].worldY = gp.livingEntity[9][i].spawnPointY = 19 * gp.tileSize;
+        gp.livingEntity[9][i].direction = "right";
+        gp.livingEntity[9][i].setLevel(50);
+        gp.livingEntity[9][i].hasEvent = true;
+        gp.livingEntity[9][i].type = 2;
         i++;
     }
 

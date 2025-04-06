@@ -23,9 +23,9 @@ public class MOB_Beast extends Entity {
         setDefaultValues(1, 100, 50,2,10, 13, 10, 13, 0);
         setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+3));
 
-        skills.add(new Skill("STOMP", "Stomps enemy.", pow, 25+maxEnergy*0.2, 2, "DAMAGE"));
-        skills.add(new Skill("Stronger STOMP", "Stomps enemy harder.", pow*1.2, 25+maxEnergy*0.4, 3, "DAMAGE"));
-        skills.add(new Skill("STRONGEST STOMP", "STOMPS ENEMY HARDEST.", pow*3, 25+maxEnergy*0.8, 5, "DAMAGE"));
+        skills.add(new Skill("STOMP", "Stomps enemy.", pow*2, 25+maxEnergy*0.2, 2, "DAMAGE"));
+        skills.add(new Skill("Stronger STOMP", "Stomps enemy harder.", pow*4, 25+maxEnergy*0.4, 3, "DAMAGE"));
+        skills.add(new Skill("STRONGEST STOMP", "STOMPS ENEMY HARDEST.", pow*8, 25+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){

@@ -44,7 +44,7 @@ public class EventScenes implements Screen{
     public void updateEvent() {
         switch(eventNum){
             case 0:{
-                if(gp.currentMap == 0 && !gp.player.event0Flag){
+                if(gp.currentMap == 0 && gp.player.event0Flag <= 0){
                     if(!entitySet){
                         //SET ENTITIES
                         gp.livingEntity[0][0].setEvent("right", 8, 10, 1, 1, false);
@@ -62,7 +62,7 @@ public class EventScenes implements Screen{
                         this.dialogues.add("Fort:\n What was that??");
                         this.dialogues.add("Fort:\n Oh, thanks by the way. Name's Fort. You?");
                         this.dialogues.add("???:\n Sylvie.");
-                        this.dialogues.add("Fort:\n You really saved my ass back there hahaha.\n What kind of creature was that anyway? Wasn't cute at all.\n");
+                        this.dialogues.add("Fort:\n You really saved my behind back there hahaha.\n What kind of creature was that anyway? Wasn't cute at all.\n");
                         this.dialogues.add("???:\n A Hollowed Beast...");
                         this.dialogues.add("Fort: ???");
                         this.dialogues.add("???:\n I'm Amaryllis. I was watching back there. Seems you two can put up a fight against these creatures.");
@@ -88,7 +88,7 @@ public class EventScenes implements Screen{
                 break;
             }
             case 1:{
-                if(gp.currentMap == 4 && !gp.player.event1Flag){
+                if(gp.currentMap == 4 && gp.player.event1Flag <= 0){
                     if(!entitySet){
                         //SET ENTITIES
                         this.dialogues.clear();
@@ -100,9 +100,14 @@ public class EventScenes implements Screen{
                         gp.player.isRunning = false;
 
                         //SET DIALOGUE
-                        this.dialogues.add("KITTTYYUH!!!");
-                        this.dialogues.add("Hello, bum.");
-                        this.dialogues.add("Fat ass.");
+                        this.dialogues.add("Amaryllis:\nKITTTYYUH!!!");
+                        this.dialogues.add("Amaryllis: \nHello, bum.");
+                        this.dialogues.add("Amaryllis: \nFat ass.");
+                        this.dialogues.add("Fort: \nKinda mean dude.");
+                        this.dialogues.add("This must be a cat cave or something.");
+                        this.dialogues.add("Seems like a pretty safe spot to rest.");
+                        this.dialogues.add("Amaryllis: \nFat ass.");
+                        this.dialogues.add("...");
                         currentDialogue = this.dialogues.get(this.dialogueIndex);
 
                         entitySet = true;
@@ -114,7 +119,7 @@ public class EventScenes implements Screen{
             break;
             }
             case 2:{
-                if(gp.currentMap == 3 && !gp.player.event2Flag){
+                if(gp.currentMap == 3 && gp.player.event2Flag <= 0){
 
                     if(!entitySet){
                         //SET ENTITIES
@@ -130,12 +135,13 @@ public class EventScenes implements Screen{
                         //SET DIALOGUES
                         gp.event.dialogues.add("MEOWR!!!");
                         gp.event.dialogues.add("Meowr");
-                        gp.event.dialogues.add("Moewr?");
-                        gp.event.dialogues.add("HHIIISSS!!");
-                        gp.event.dialogues.add("Grrrrrrrrrr!!!");
+                        gp.event.dialogues.add("???: \nI told you to be gentler.");
+                        gp.event.dialogues.add("???: \nLook what happened.");
                         gp.event.dialogues.add("MEOWR!!!");
-                        gp.event.dialogues.add("HHIIISSS!!");
+                        gp.event.dialogues.add("???: \nOkay! Okay!... Just let me patch him up a bit");
                         gp.event.dialogues.add("Moewr?");
+                        gp.event.dialogues.add("...");
+                        gp.event.dialogues.add(".....");
                         currentDialogue = dialogues.get(dialogueIndex);
 
                         entitySet = true;
@@ -143,6 +149,43 @@ public class EventScenes implements Screen{
                     }
                     else{
                         playEvent2();
+                    }
+                }
+                break;
+            }
+            case 6:{
+                if(gp.currentMap == 8 && gp.player.event6Flag <= 0){
+
+                    if(!entitySet){
+                        //SET ENTITIES
+                        dialogues.clear();
+                        gp.livingEntity[8][3] = gp.companion1;
+                        gp.livingEntity[8][3].setEvent("down", 27, 2, 1, 1, false);
+                        gp.livingEntity[8][4] = gp.companion2;
+                        gp.livingEntity[8][4].setEvent("down", 29, 2, 1, 1, false);
+
+                        //SET PLAYER
+                        gp.player.isRunning = true;
+
+                        //SET DIALOGUES
+                        gp.event.dialogues.add("Amaryllis: \n What in the...");
+                        gp.event.dialogues.add("Amaryllis: \n What in the...");
+                        gp.event.dialogues.add("Fort: \n...World");
+                        gp.event.dialogues.add("Amaryllis: \n Don't finish my sentences.");
+                        gp.event.dialogues.add("Fort: \n Okay... Sheesh.");
+                        gp.event.dialogues.add("Sylvie: \n How could a village thrive in the middle of all this corruption?");
+                        gp.event.dialogues.add("Fort: \n Something feels kinda off.. Let's go talk to one of the villagers.");
+                        gp.event.dialogues.add("....");
+                        gp.event.dialogues.add("...");
+                        gp.event.dialogues.add(".....");
+                        currentDialogue = dialogues.get(dialogueIndex);
+                        dialogues.removeFirst();
+
+                        System.out.println("Check");
+                        entitySet = true;
+                    }
+                    else{
+                        playEvent6();
                     }
                 }
                 break;
@@ -223,7 +266,7 @@ public class EventScenes implements Screen{
             if (sequenceCheck == sequenceLimit) {
                 if(buffer > 100){
                     eventFinished = true;
-                    gp.player.event0Flag = true;
+                    gp.player.event0Flag = 1;
 
                     gp.livingEntity[0][1] = null;
                     gp.entityList.remove(gp.livingEntity[0][1]);
@@ -264,7 +307,7 @@ public class EventScenes implements Screen{
         if(sequenceCheck == sequenceLimit) {
             if(buffer > 250){
                 eventFinished = true;
-                gp.player.event1Flag = true;
+                gp.player.event1Flag = 1;
 
                 Entity entity = gp.livingEntity[4][5];
                 gp.livingEntity[4][5] = null;
@@ -329,7 +372,7 @@ public class EventScenes implements Screen{
         if(sequenceCheck >= sequenceLimit) {
             if(buffer > 150){
                 eventFinished = true;
-                gp.player.event2Flag = true;
+                gp.player.event2Flag = 1;
 
                 gp.ui.addMessage("Invoked");
                 gp.player.isUnconscious = true;
@@ -347,6 +390,70 @@ public class EventScenes implements Screen{
                 gp.livingEntity[4][0].worldY = gp.livingEntity[4][0].spawnPointY = 22 * gp.tileSize;
                 eventExit();
 
+            }
+        }
+    }
+    public void playEvent6(){
+        if(!gp.ui.fading){
+            eventNum = 6;
+            int sequenceLimit = dialogues.size();
+            buffer++;
+
+            if (sequenceCheck == 0) {
+                System.out.println("Sequence: " + sequenceCheck);
+                dialogueOn = true;
+                canClick = false;
+                gp.player.direction = "down";
+
+                gp.player.spriteAnim(2);
+                if(buffer>180){
+                    gp.player.worldY++;
+                    canClick = true;
+                    nextDialogue();
+                }
+            }
+            if(sequenceCheck == 1){
+                gp.player.isRunning = false;
+                gp.player.isIdling = true;
+                nextDialogue();
+                gp.livingEntity[8][3].isIdling = true;
+                gp.livingEntity[8][4].isIdling = true;
+            }
+
+
+
+            if(sequenceCheck == 5){
+                buffer = 0;
+                gp.livingEntity[8][3] = gp.companion1;
+                gp.livingEntity[8][3].direction = "down";
+                gp.livingEntity[8][2].isIdling = false;
+                gp.livingEntity[8][2].speed = 1;
+                if(buffer> 20){
+                    gp.livingEntity[8][4] = gp.companion1;
+                    gp.livingEntity[8][4].direction = "down";
+                    gp.livingEntity[8][4].isIdling = false;
+                    gp.livingEntity[8][4].speed = 1;
+                }
+                if(buffer > 25){
+                    gp.player.direction = "down";
+                    gp.player.worldY++;
+                    gp.player.spriteAnim(2);
+                }
+            }
+
+            if (sequenceCheck == sequenceLimit) {
+                if(buffer > 200){
+                    eventFinished = true;
+                    gp.player.event6Flag = 1;
+
+                    gp.livingEntity[8][3] = null;
+                    gp.entityList.remove(gp.livingEntity[8][3]);
+
+                    gp.livingEntity[8][4] = null;
+                    gp.entityList.remove(gp.livingEntity[8][4]);
+
+                    eventExit();
+                }
             }
         }
     }

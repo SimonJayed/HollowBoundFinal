@@ -5,6 +5,7 @@ import main.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -54,18 +55,12 @@ public class KeyHandler implements KeyListener {
                         gp.ui.startFadeIn();
                         gp.gameState = gp.characterPickState;
                         gp.titleScreen.emptyImages();
-//                    gp.playMusic(2);
-                        gp.sound.setVolume(-25.0f);
                     }
                     if (gp.titleScreen.commandNum == 1) {
-                        gp.saveLoad.load();
-                        gp.gameState = gp.playState;
-                        gp.playMusic(0);
+                            gp.saveLoad.load();
+                            gp.gameState = gp.playState;
                     }
                     if (gp.titleScreen.commandNum == 2) {
-
-                    }
-                    if (gp.titleScreen.commandNum == 3) {
                         System.exit(0);
                     }
                 }
@@ -85,16 +80,16 @@ public class KeyHandler implements KeyListener {
                         if (gp.pickScreen.commandNum < 0) {
                             gp.pickScreen.commandNum = 0;
                         }
-                        gp.playSoundEffect(3);
-                        gp.sound.setVolume(-20.0f);
+//                        gp.playSoundEffect(3);
+//                        gp.sound.setVolume(-20.0f);
                     }
                     else if (code == KeyEvent.VK_D) {
                         gp.pickScreen.commandNum++;
                         if (gp.pickScreen.commandNum > 2) {
                             gp.pickScreen.commandNum = 2;
                         }
-                        gp.playSoundEffect(3);
-                        gp.sound.setVolume(-20.0f);
+//                        gp.playSoundEffect(3);
+//                        gp.sound.setVolume(-20.0f);
                     }
                     if (code == KeyEvent.VK_ESCAPE) {
                         gp.ui.startFadeIn();
@@ -102,9 +97,6 @@ public class KeyHandler implements KeyListener {
                     }
                 }
                 else{
-                    if(code == KeyEvent.VK_W){
-                        gp.pickScreen.commandNum = 3;
-                    }
                     if (code == KeyEvent.VK_ESCAPE) {
                         gp.ui.startFadeIn();
                         gp.pickScreen.isPicking = false;
@@ -448,30 +440,24 @@ public class KeyHandler implements KeyListener {
                         if(gp.inventoryScreen.commandNum == 3){
                             try {
                                 gp.saveLoad.save();
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
+                                gp.player.hasSave = true;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
                         }
                         if(gp.inventoryScreen.commandNum == 4){
-
+                            gp.gameState = gp.titleState;
                         }
                     }
 
                 }
                 if(code == KeyEvent.VK_1){
-                    gp.inventoryScreen.isInventory = true;
                     gp.inventoryScreen.isStatPanel = false;
-                    gp.inventoryScreen.isSettings = false;
+                    gp.inventoryScreen.isSettings = true;
                 }
                 if(code == KeyEvent.VK_2){
                     gp.inventoryScreen.isStatPanel = true;
                     gp.inventoryScreen.isSettings = false;
-                    gp.inventoryScreen.isInventory = false;
-                }
-                if(code == KeyEvent.VK_3){
-                    gp.inventoryScreen.isSettings = true;
-                    gp.inventoryScreen.isInventory = false;
-                    gp.inventoryScreen.isStatPanel = false;
                 }
                 if (code == KeyEvent.VK_I || code == KeyEvent.VK_ESCAPE) {
                     gp.gameState = gp.playState;

@@ -2,6 +2,7 @@ package entity;
 
 import entity.components.Skill;
 import main.GamePanel;
+import misc.KeyHandler;
 
 public class NPC_Sylvie extends Entity {
 
@@ -22,15 +23,9 @@ public class NPC_Sylvie extends Entity {
 
         skills.add(new Skill("Nature's Embrace", "Channels natural energy to heal a single ally", mag*2, 100+maxEnergy*0.2, 2, "BUFF_ALLY"));
         skills.add(new Skill("Thorned Whip", "Summons thorny vines to strike at an enemy.", mag*4, 100+maxEnergy*0.4, 3, "DAMAGE"));
-        skills.add(new Skill("Nature's Blessing", "Creates an explosion of natural energy that increases allies' strength and heals them for 3 turns.", mag*5, 100+maxEnergy*0.8, 5, "BUFF_ALLY"));
+        skills.add(new Skill("Nature's Blessing", "Creates an explosion of natural energy.", mag*6, 100+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
-    public void setStatIncrements(){
-        this.vit += 1;
-        this.pow += 1;
-        this.mag += 4;
-        this.agi += 1;
-    }
 
     public void useSkill(int skillIndex, Entity target) {
         switch(skillIndex){
@@ -65,7 +60,13 @@ public class NPC_Sylvie extends Entity {
             case 2:{
                 this.energy -= skills.get(2).energyCost;
                 skills.get(2).use();
-                gp.battleScreen.output = skills.get(2).power;
+                gp.battleScreen.output = skills.get(2).power - target.defense/2;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " createes an explosion on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                this.aggro++;
                 break;
             }
         }

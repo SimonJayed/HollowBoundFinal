@@ -21,9 +21,9 @@ public class NPC_Amaryllis extends Entity {
         setDefaultValues(5, 75, 100,5,5, 8, 10, 13, 9);
         setDialogue();
 
-        skills.add(new Skill("Disabling Reagent", "Silences the enemy for 2 turns, rendering them unable to use skills, along with a random debuff.", agi, 50+maxEnergy*0.3, 4, "DAMAGE"));
-        skills.add(new Skill("Experimental Cure", "Replaces an ally's status effects (including positive ones) with a random buff that lasts 3 turns", agi/2, 50+maxEnergy*0.3, 3, "BUFF_ALLY"));
-        skills.add(new Skill("Unleash", "Unleashes a flurry of 3-5 attacks at the enemy.", agi/2, 50+maxEnergy*0.8, 5, "DAMAGE"));
+        skills.add(new Skill("Hack n Slash", "Amaryllis uses her nails to penetrate the enemy.", agi*3, 25+maxEnergy*0.3, 2, "DAMAGE"));
+        skills.add(new Skill("Experimental Salve", "Strengthens ally. Lasts 3 turns", agi, 25+maxEnergy*0.2, 3, "BUFF_ALLY"));
+        skills.add(new Skill("Unleash", "Unleashes a flurry of 3-5 attacks at the enemy.", agi*2, 50+maxEnergy*0.8, 5, "DAMAGE"));
     }
 
     public void setStatIncrements(){
@@ -44,9 +44,8 @@ public class NPC_Amaryllis extends Entity {
                 target.hp -= gp.battleScreen.output;
 
 
-                gp.ui.addMessage(getName() + " heals " + target.getName() + " for " + skills.get(0).power + ".");
+                gp.ui.addMessage(getName() + " lunges at " + target.getName() + " for " + gp.battleScreen.output + " damage.");
 
-                target.isHealed = true;
                 break;
             }
             case 1:{
@@ -54,34 +53,12 @@ public class NPC_Amaryllis extends Entity {
                 skills.get(1).use();
                 gp.battleScreen.output = skills.get(1).power;
 
-                target.healing = 0;
-                target.strengthened = 0;
-                target.hardened = 0;
+                target.tempAtk = target.attack;
 
-                int buff = gp.randomize(0, 2);
+                target.attack += gp.battleScreen.output;
+                target.strengthened = 3;
 
-                switch(buff){
-                    case 0:{
-                        target.healing = 3;
-                        break;
-                    }
-                    case 1:{
-                        target.tempDef = target.defense;
-
-                        target.defense += gp.battleScreen.output;
-                        target.hardened = 3;
-                        break;
-                    }
-                    case 2:{
-                        target.tempAtk = target.attack;
-
-                        target.attack += gp.battleScreen.output;
-                        target.strengthened = 3;
-                        break;
-                    }
-                }
-
-                gp.ui.addMessage(getName() + " experiments on " + target.getName() + ", giving a random buff .");
+                gp.ui.addMessage(getName() + " experiments on " + target.getName() + ", boostings attack by" + gp.battleScreen.output + ".");
                 break;
             }
             case 2:{
@@ -94,6 +71,8 @@ public class NPC_Amaryllis extends Entity {
                 for(int i = 0; i<attackNum; i++){
                     target.hp -= gp.battleScreen.output;
                 }
+
+                gp.ui.addMessage(getName() + " goes crazy on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
                 break;
             }
         }

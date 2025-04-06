@@ -1,5 +1,6 @@
 package entity;
 
+import entity.components.Skill;
 import main.GamePanel;
 
 public class MOB_Swordsman extends Entity {
@@ -22,7 +23,11 @@ public class MOB_Swordsman extends Entity {
         getImage("hollowedSwordsman");
         setDefaultValues(1, 75, 100,5,5, 8, 10, 13, 9);
         setLevel(gp.randomize(gp.player.areaLevel, gp.player.areaLevel+5));
-        setDialogue();
+
+        skills.add(new Skill("Slice", "Slices enemy.", agi*2, 25+maxEnergy*0.2, 2, "DAMAGE"));
+        skills.add(new Skill("Stronger Slice", "Slices enemy harder.", agi*4, 25+maxEnergy*0.4, 3, "DAMAGE"));
+        skills.add(new Skill("STRONGEST SLICE", "SLICES ENEMY HARDEST.", agi*8, 25+maxEnergy*0.8, 5, "DAMAGE"));
+
     }
 
     public void setStatIncrements(){
@@ -30,6 +35,45 @@ public class MOB_Swordsman extends Entity {
         this.pow += 1;
         this.mag += 2;
         this.agi += 3;
+    }
+
+    public void useSkill(int skillIndex, Entity target) {
+        switch(skillIndex){
+            case 0:{
+                this.energy -= skills.get(0).energyCost;
+                skills.get(0).use();
+                gp.battleScreen.output = skills.get(0).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " slices " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 1:{
+                this.energy -= skills.get(1).energyCost;
+                skills.get(1).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+
+                target.hp -= gp.battleScreen.output;
+
+                gp.ui.addMessage(getName() + " slices hard on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+            case 2:{
+                this.energy -= skills.get(2).energyCost;
+                skills.get(2).use();
+                gp.battleScreen.output = skills.get(1).power - target.defense;
+                gp.battleScreen.output = Math.max(gp.battleScreen.output, 1);
+
+                target.hp -= gp.battleScreen.output;
+                gp.ui.addMessage(getName() + " slices REALLY HARD on " + target.getName() + " dealing " + gp.battleScreen.output + " damage.");
+                break;
+            }
+        }
     }
 
     public void checkDefeated(){

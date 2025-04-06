@@ -92,7 +92,7 @@ public class BattleScreen implements Screen{
         loadImages();
         currentEnemy = enemy;
         battleQueue.clear();
-        if(!gp.player.event0Flag){
+        if(gp.player.event0Flag <= 0){
             battleQueue.add(gp.player);
         }
         else{
@@ -162,7 +162,7 @@ public class BattleScreen implements Screen{
                 roundNum++;
 
                 for (Entity member : battleQueue) {
-                    member.energy += member.energyRegen/2;
+                    member.energy += member.energyRegen/2 + member.mag;
                     if (member.energy > member.maxEnergy) {
                         member.energy = member.maxEnergy;
                     }
@@ -625,7 +625,7 @@ public class BattleScreen implements Screen{
         }
 
         if (currentEnemy.hp <= 0) {
-            if(!gp.player.event0Flag){
+            if(gp.player.event0Flag <= 0 || gp.player.event6Flag <= 0){
                 eventEndBattle();
             }
             endBattle();
@@ -652,7 +652,7 @@ public class BattleScreen implements Screen{
         }
 
         if (currentEnemy.hp <= 0) {
-            if(!gp.player.event0Flag){
+            if(gp.player.event0Flag <= 0){
                 eventEndBattle();
             }
             endBattle();
@@ -679,8 +679,8 @@ public class BattleScreen implements Screen{
                 target.hp = 0;
             }
 
-            if (target.hp <= 50 && currentEnemy == gp.livingEntity[3][0] || target.hp <= 100 && !gp.player.event0Flag) {
-                if(!gp.player.event0Flag && gp.event.sequenceCheck < 3){
+            if (gp.player.hp <= 100 && currentEnemy == gp.livingEntity[3][0] || target.hp <= 100 && gp.player.event0Flag <= 0) {
+                if(gp.player.event0Flag <= 0 && gp.event.sequenceCheck < 3){
                     gp.gameState = gp.eventState;
                     target.hp = target.maxHP;
                     return;
@@ -710,7 +710,7 @@ public class BattleScreen implements Screen{
     }
 
     public void endBattle(){
-        double expGain = currentEnemy.nextLevelExp/3;
+        double expGain = currentEnemy.nextLevelExp;
 
 
         battleFinished = true;

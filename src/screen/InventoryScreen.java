@@ -21,7 +21,6 @@ public class InventoryScreen implements Screen{
 
     public boolean isStatPanel = true;
     public boolean isSettings = false;
-    public boolean isInventory = false;
 
     public InventoryScreen (GamePanel gp){
         this.gp = gp;
@@ -57,9 +56,6 @@ public class InventoryScreen implements Screen{
             else{
                 drawStats(gp.companion2);
             }
-        }
-        else if(isInventory){
-
         }else if(isSettings){
             drawSettings(g2);
         }
@@ -71,16 +67,15 @@ public class InventoryScreen implements Screen{
         int frameY = gp.tileSize;
         g2.drawImage(statPanel, frameX, frameY,null);
 
-        int textX;
-        int textY;
+        int textX = gp.tileSize*3+8;
+        int textY = gp.tileSize*2+17;
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25f));
         String text = "Options";
-        textX = gp.ui.getXforCenteredText(text);
-        textY = gp.tileSize*3+10;
         g2.drawString(text, textX, textY);
 
         g2.setFont(g2.getFont().deriveFont(18f));
+        textX += gp.tileSize;
         textY += gp.tileSize*2;
         g2.drawString("MUSIC", textX, textY);
         if(commandNum == 0){
@@ -137,7 +132,7 @@ public class InventoryScreen implements Screen{
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14f));
         x = gp.screenWidth/2 - gp.tileSize;
-        y = gp.tileSize*3;
+        y = gp.tileSize*4;
         g2.drawString("LEVEL: " + gp.df.format(entity.level), x, y);
         if(entity == gp.player){
             g2.setColor(new Color(255, 0, 0));

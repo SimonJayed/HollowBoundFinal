@@ -16,6 +16,7 @@ public class Player extends Entity{
     public final int screenY;
 
     public int hasKey = 0;
+    public boolean hasSave = false;
 
     public String playing = "";
 
@@ -30,13 +31,13 @@ public class Player extends Entity{
     public BufferedImage attack1, attack2;
     public BufferedImage runUp1, runUp2, runDown1, runDown2, runLeft1, runLeft2, runRight1, runRight2;
 
-    public boolean event0Flag = false;
-    public boolean event1Flag = false;
-    public boolean event2Flag = false;
-    public boolean event3Flag = false;
-    public boolean event4Flag = false;
-    public boolean event5Flag = false;
-    public boolean event6Flag = false;
+    public int event0Flag = 0;
+    public int event1Flag = 0;
+    public int event2Flag = 0;
+    public int event3Flag = 0;
+    public int event4Flag = 0;
+    public int event5Flag = 0;
+    public int event6Flag = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -97,11 +98,11 @@ public class Player extends Entity{
             case "fort":{
                 setName("Fort");
                 getImage("fort");
-                setDefaultValues(1, 100, 50,4, 15, 60, 4, 5,  15);
+                setDefaultValues(1, 100, 50,4, 15, 6, 4, 5,  15);
                 getCombatImages("fort");
-                skills.add(new Skill("Rage Bait", "Taunts the enemy and increases defense for 2 turns.", vit*0.4, 25+maxEnergy*0.2, 3, "BUFF_SELF"));
-                skills.add(new Skill("Meat Shield", "Grants additional defense to an ally for 3 turns.", vit*0.5, 25+maxEnergy*0.4, 3, "BUFF_ALLY"));
-                skills.add(new Skill("SMAAAAASHHHHH", "Hits the enemy equivalent to lost health and defense stat.", (maxHP-hp*0.8)+(defense*1.2), 25+maxEnergy*0.8, 5, "DAMAGE"));
+                skills.add(new Skill("Rage Bait", "Taunts the enemy and increases defense for 2 turns.", vit, 25+maxEnergy*0.2, 3, "BUFF_SELF"));
+                skills.add(new Skill("Meat Shield", "Grants additional defense to an ally for 3 turns.", vit*1.2, 25+maxEnergy*0.4, 3, "BUFF_ALLY"));
+                skills.add(new Skill("SMAAAAASHHHHH", "Hits the enemy equivalent to lost health and defense stat.", (maxHP-hp)+(defense*1.2), 25+maxEnergy*0.8, 5, "DAMAGE"));
                 break;
             }
             case "amaryllis":{
@@ -138,12 +139,12 @@ public class Player extends Entity{
                 gp.ui.addMessage(getName() + " taunts " + target.getName() + " and increases own defense by " + gp.battleScreen.output + " for 2 turns.");
 
                 target.hardened = 2;
-                aggro = 2;
+                aggro += 5;
                 break;
             }
             case 1:{
                 this.energy -= skills.get(1).energyCost;
-                gp.battleScreen.output += skills.get(1).power;
+                gp.battleScreen.output = skills.get(1).power;
                 skills.get(1).use();
 
                 target.defense += gp.battleScreen.output;
@@ -154,10 +155,10 @@ public class Player extends Entity{
             }
             case 2:{
                 this.energy -= skills.get(2).energyCost;
-                gp.battleScreen.output += skills.get(2).power;
+                gp.battleScreen.output = skills.get(2).power;
                 skills.get(2).use();
 
-                target.defense += gp.battleScreen.output;
+                target.hp -= gp.battleScreen.output;
                 gp.ui.addMessage(getName() + " hits " + target.getName() + " with the UNITED STATES OF SMASH for " + gp.battleScreen.output + " damage.");
 
                 break;
@@ -421,6 +422,25 @@ public class Player extends Entity{
                     }
                     else if(enemy >= 5){
                         gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else{
+                        gp.battleScreen.startBattle(new MOB_HollowHuman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Human!!");
+                    }
+                }
+                case 9:{
+                    areaLevel = 45;
+                    if(enemy >= 8){
+                        gp.battleScreen.startBattle(new MOB_Swordsman(gp));
+                        gp.ui.addMessage("Encountered Hollowed Swordsman!!");
+                    }
+                    else if(enemy >= 6){
+                        gp.battleScreen.startBattle(new MOB_Beast(gp));
+                        gp.ui.addMessage("Encountered Hollowed Beast!!");
+                    }
+                    else if(enemy >= 4){
+                        gp.battleScreen.startBattle(new NPC_VillagerOldMan(gp));
                         gp.ui.addMessage("Encountered Hollowed Beast!!");
                     }
                     else{
